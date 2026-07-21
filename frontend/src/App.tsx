@@ -9,7 +9,8 @@ const StockView = lazy(() => import('./views/StockView'));
 const InsumosView = lazy(() => import('./views/InsumosView'));
 const DividirCadiView = lazy(() => import('./views/DividirCadiView'));
 const VentasTurnoView = lazy(() => import('./views/VentasTurnoView'));
-import { Shield, Users, LogOut, Menu, UserCheck, Lock, Fingerprint, CheckCircle2, RefreshCw, Sun, Moon } from 'lucide-react';
+const TemplateGeneratorView = lazy(() => import('./views/TemplateGeneratorView'));
+import { Shield, Users, LogOut, Menu, UserCheck, Lock, Fingerprint, CheckCircle2, RefreshCw, Sun, Moon, Sparkles } from 'lucide-react';
 import Logo from './components/Logo';
 import featuresConfig from './config/features.json';
 import brandingConfig from './config/branding.json';
@@ -536,6 +537,15 @@ function App() {
                   </button>
                 )
               )}
+              <button
+                onClick={() => setCurrentView('plantillas')}
+                className={`px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all border border-amber-500/30 flex items-center space-x-1.5 ${
+                  currentView === 'plantillas' ? 'bg-amber-500 text-slate-950 shadow-md font-extrabold' : 'text-amber-400 hover:text-amber-300 bg-amber-500/10'
+                }`}
+              >
+                <Sparkles size={14} />
+                <span>Creador de Plantillas</span>
+              </button>
             </div>
 
             <Suspense fallback={
@@ -551,6 +561,7 @@ function App() {
               {featuresConfig.admin.enabled && currentView === 'admin' && <AdminView />}
               {isAdmin && featuresConfig.stock.enabled && currentView === 'stock' && <StockView />}
               {isAdmin && featuresConfig.insumos.enabled && currentView === 'insumos' && <InsumosView />}
+              {currentView === 'plantillas' && <TemplateGeneratorView />}
             </Suspense>
           </div>
         ) : (

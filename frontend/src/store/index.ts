@@ -43,8 +43,8 @@ interface POSState {
   socketConnected: boolean;
   tema: 'oscuro' | 'claro';
   toggleTema: () => void;
-  currentView: 'pos' | 'cargos' | 'dividir-cadi' | 'admin' | 'stock' | 'insumos' | 'ventas-turno';
-  setCurrentView: (view: 'pos' | 'cargos' | 'dividir-cadi' | 'admin' | 'stock' | 'insumos' | 'ventas-turno') => void;
+  currentView: 'pos' | 'cargos' | 'dividir-cadi' | 'admin' | 'stock' | 'insumos' | 'ventas-turno' | 'plantillas';
+  setCurrentView: (view: 'pos' | 'cargos' | 'dividir-cadi' | 'admin' | 'stock' | 'insumos' | 'ventas-turno' | 'plantillas') => void;
   sociosSeleccionados: any[];
   setSociosSeleccionados: (socios: any[]) => void;
 
