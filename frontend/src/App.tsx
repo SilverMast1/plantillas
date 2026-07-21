@@ -551,6 +551,30 @@ function App() {
                       {featuresConfig.insumos.label}
                     </button>
                   )}
+                  {(featuresConfig as any).facturacion?.enabled && (
+                    <button
+                      onClick={() => alert('Módulo de Facturación CFDI preparado para el cliente')}
+                      className="px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all bg-blue-600/80 text-white hover:bg-blue-600"
+                    >
+                      {(featuresConfig as any).facturacion.label}
+                    </button>
+                  )}
+                  {(featuresConfig as any).qrMenu?.enabled && (
+                    <button
+                      onClick={() => alert('Módulo de Menú Digital QR activo para el cliente')}
+                      className="px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all bg-teal-600/80 text-white hover:bg-teal-600"
+                    >
+                      {(featuresConfig as any).qrMenu.label}
+                    </button>
+                  )}
+                  {(featuresConfig as any).delivery?.enabled && (
+                    <button
+                      onClick={() => alert('Módulo de Pedidos a Domicilio activo para el cliente')}
+                      className="px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all bg-rose-600/80 text-white hover:bg-rose-600"
+                    >
+                      {(featuresConfig as any).delivery.label}
+                    </button>
+                  )}
                 </>
               ) : (
                 featuresConfig.admin.enabled && (

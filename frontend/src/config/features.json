@@ -8,7 +8,7 @@
     "label": "Cargos a Socios"
   },
   "dividirCadi": {
-    "enabled": false,
+    "enabled": true,
     "label": "Dividir Cuentas (Cadi)"
   },
   "ventasTurno": {
@@ -24,7 +24,19 @@
     "label": "Inventario y Stock"
   },
   "insumos": {
-    "enabled": false,
+    "enabled": true,
     "label": "Insumos de Comida"
+  },
+  "facturacion": {
+    "enabled": true,
+    "label": "Facturación CFDI"
+  },
+  "qrMenu": {
+    "enabled": true,
+    "label": "Menú Digital QR"
+  },
+  "delivery": {
+    "enabled": true,
+    "label": "Pedidos Domicilio"
   }
 }

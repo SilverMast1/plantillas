@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Download, Sparkles, Database, Layers, CheckCircle2, Copy, RefreshCw, Eye, Settings, Store, Utensils, Flag, ShoppingBag, Rocket, DollarSign, Send } from 'lucide-react';
+import { Download, Sparkles, Database, Layers, CheckCircle2, Copy, RefreshCw, Eye, Settings, Store, Utensils, Flag, ShoppingBag, Rocket, DollarSign, Send, FileText, QrCode, Truck } from 'lucide-react';
 import { useStore } from '../store';
 
 interface Preset {
@@ -19,6 +19,9 @@ interface Preset {
     admin: boolean;
     stock: boolean;
     insumos: boolean;
+    facturacion: boolean;
+    qrMenu: boolean;
+    delivery: boolean;
   };
 }
 
@@ -32,7 +35,7 @@ const PRESETS: Preset[] = [
     companyName: 'Restaurante & Bar',
     appName: 'POS Gastronómico',
     tagline: 'Gestión de Mesas y Comandas',
-    features: { pos: true, cargos: false, dividirCadi: true, ventasTurno: true, admin: true, stock: true, insumos: true }
+    features: { pos: true, cargos: false, dividirCadi: true, ventasTurno: true, admin: true, stock: true, insumos: true, facturacion: false, qrMenu: true, delivery: true }
   },
   {
     id: 'snack',
@@ -43,7 +46,7 @@ const PRESETS: Preset[] = [
     companyName: 'Snack & Express',
     appName: 'POS Mostrador',
     tagline: 'Venta Rápida e Inventario',
-    features: { pos: true, cargos: false, dividirCadi: false, ventasTurno: true, admin: true, stock: true, insumos: false }
+    features: { pos: true, cargos: false, dividirCadi: false, ventasTurno: true, admin: true, stock: true, insumos: false, facturacion: true, qrMenu: false, delivery: true }
   },
   {
     id: 'club',
@@ -54,7 +57,7 @@ const PRESETS: Preset[] = [
     companyName: 'Club Campestre',
     appName: 'Cadi System POS',
     tagline: 'Control de Cuentas y Socios',
-    features: { pos: true, cargos: true, dividirCadi: true, ventasTurno: true, admin: true, stock: true, insumos: true }
+    features: { pos: true, cargos: true, dividirCadi: true, ventasTurno: true, admin: true, stock: true, insumos: true, facturacion: true, qrMenu: true, delivery: false }
   }
 ];
 
@@ -72,15 +75,14 @@ export default function TemplateGeneratorView() {
     ventasTurno: true,
     admin: true,
     stock: true,
-    insumos: true
+    insumos: true,
+    facturacion: true,
+    qrMenu: true,
+    delivery: true
   });
 
   const [copiedConfig, setCopiedConfig] = useState(false);
   const [copiedCotizacion, setCopiedCotizacion] = useState(false);
-
-  // Cotizador Comercial
-  const [precioBase, setPrecioBase] = useState(3500);
-  const [costoSoporte, setCostoSoporte] = useState(500);
 
   const applyPreset = (presetId: string) => {
     const preset = PRESETS.find(p => p.id === presetId);
@@ -117,7 +119,10 @@ export default function TemplateGeneratorView() {
         ventasTurno: { enabled: features.ventasTurno, label: "Ventas de Turno" },
         admin: { enabled: features.admin, label: "Gestión Administrativa" },
         stock: { enabled: features.stock, label: "Inventario y Stock" },
-        insumos: { enabled: features.insumos, label: "Insumos de Comida" }
+        insumos: { enabled: features.insumos, label: "Insumos de Comida" },
+        facturacion: { enabled: features.facturacion, label: "Facturación CFDI" },
+        qrMenu: { enabled: features.qrMenu, label: "Menú Digital QR" },
+        delivery: { enabled: features.delivery, label: "Pedidos Domicilio" }
       }
     }, null, 2);
   };
@@ -139,22 +144,27 @@ export default function TemplateGeneratorView() {
   };
 
   const activeModulesCount = Object.values(features).filter(Boolean).length;
-  const precioTotalCalculado = precioBase + (activeModulesCount > 4 ? 1000 : 0) + (dbProvider === 'postgresql' ? 800 : 0);
+  
+  // Precios Bajos + Mensualidad
+  const pagoInicialConfig = 1299;
+  const mensualidadConfig = 299 + (activeModulesCount > 6 ? 100 : 0);
 
   const handleCopyCotizacionWhatsApp = () => {
     const texto = `Hola ${companyName}! 🚀
-Te presento la propuesta para tu nuevo Sistema de Punto de Venta (${appName}):
+Te presento la propuesta para tu nuevo Sistema POS (${appName}):
 
-📌 *Incluye:*
+📌 *Módulos Incluidos (${activeModulesCount}):*
 • Marca y Logo Personalizado (${companyName})
 • Motor de Base de datos: ${dbProvider.toUpperCase()}
-• Módulos activos (${activeModulesCount}): ${Object.entries(features).filter(([_, v]) => v).map(([k]) => k).join(', ')}
+• Módulos activos: ${Object.entries(features).filter(([_, v]) => v).map(([k]) => k).join(', ')}
 • Soporte Multicaja y Control de Turnos
-• Funcionamiento Offline y Reportes
+• Funcionamiento Offline
 
-💰 *Inversión Total:* $${precioTotalCalculado.toLocaleString('es-MX')} MXN (Pago Único sin mensualidad obligatoria)
+💰 *Plan de Precios Accesible:*
+• 🛠️ *Pago Inicial de Instalación & Configuración:* $${pagoInicialConfig.toLocaleString('es-MX')} MXN
+• 🔄 *Mensualidad (Soporte, Servidor & Nube):* $${mensualidadConfig.toLocaleString('es-MX')} MXN / mes
 
-¿Te gustaría agendar una demo en vivo?`;
+¿Te gustaría probar una demo en vivo ahora mismo?`;
 
     navigator.clipboard.writeText(texto);
     setCopiedCotizacion(true);
@@ -276,6 +286,9 @@ Te presento la propuesta para tu nuevo Sistema de Punto de Venta (${appName}):
                 { key: 'admin', label: 'Gestión Administrativa', desc: 'Reportes y cortes globales' },
                 { key: 'stock', label: 'Inventario y Stock', desc: 'Control de existencias de productos' },
                 { key: 'insumos', label: 'Insumos de Comida', desc: 'Recetas e ingredientes por platillo' },
+                { key: 'facturacion', label: 'Facturación Electrónica', desc: 'Generación de facturas CFDI' },
+                { key: 'qrMenu', label: 'Menú Digital QR', desc: 'Carta digital para smartphones' },
+                { key: 'delivery', label: 'Pedidos a Domicilio', desc: 'Control de pedidos y envíos' },
               ].map(({ key, label, desc }) => {
                 const isEnabled = (features as any)[key];
                 return (
@@ -344,6 +357,9 @@ Te presento la propuesta para tu nuevo Sistema de Punto de Venta (${appName}):
                 {features.admin && <span className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800 text-slate-200 font-semibold">Admin</span>}
                 {features.stock && <span className="text-[11px] px-2.5 py-1 rounded-lg bg-indigo-650 text-white font-semibold">Stock</span>}
                 {features.insumos && <span className="text-[11px] px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-semibold">Insumos</span>}
+                {features.facturacion && <span className="text-[11px] px-2.5 py-1 rounded-lg bg-blue-600 text-white font-semibold">Facturación</span>}
+                {features.qrMenu && <span className="text-[11px] px-2.5 py-1 rounded-lg bg-teal-600 text-white font-semibold">Menú QR</span>}
+                {features.delivery && <span className="text-[11px] px-2.5 py-1 rounded-lg bg-rose-600 text-white font-semibold">Delivery</span>}
               </div>
             </div>
           </div>
@@ -374,28 +390,38 @@ Te presento la propuesta para tu nuevo Sistema de Punto de Venta (${appName}):
             </div>
           </div>
 
-          {/* Cotizador Comercial para Vender al Cliente */}
+          {/* Cotizador Comercial para Vender al Cliente (Precios Bajos + Mensualidad) */}
           <div className="glass-card p-6 rounded-2xl border border-amber-500/20 bg-gradient-to-br from-slate-900 to-amber-950/20 space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
               <h2 className="text-base font-bold text-amber-400 flex items-center space-x-2">
                 <DollarSign size={18} />
-                <span>Cotizador de Venta Rápida</span>
+                <span>Plan de Pago Sugerido</span>
               </h2>
-              <span className="text-xs font-extrabold text-emerald-400 font-mono bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                ${precioTotalCalculado.toLocaleString('es-MX')} MXN
-              </span>
+              <div className="text-right">
+                <span className="text-xs text-slate-400 block">Pago Inicial + Mensualidad</span>
+                <span className="text-sm font-extrabold text-emerald-400 font-mono">
+                  ${pagoInicialConfig.toLocaleString('es-MX')} + ${mensualidadConfig.toLocaleString('es-MX')}/mes
+                </span>
+              </div>
             </div>
 
-            <p className="text-xs text-slate-300">
-              Genera una propuesta económica lista para enviar a tu cliente por WhatsApp.
-            </p>
+            <div className="grid grid-cols-2 gap-2 text-xs text-slate-300">
+              <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800">
+                <span className="text-slate-400 block text-[10px] uppercase font-semibold">Instalación Única</span>
+                <span className="font-extrabold text-white text-sm">${pagoInicialConfig.toLocaleString('es-MX')} MXN</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800">
+                <span className="text-slate-400 block text-[10px] uppercase font-semibold">Suscripción Mensual</span>
+                <span className="font-extrabold text-emerald-400 text-sm">${mensualidadConfig.toLocaleString('es-MX')} MXN / mes</span>
+              </div>
+            </div>
 
             <button
               onClick={handleCopyCotizacionWhatsApp}
               className="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-extrabold text-xs flex items-center justify-center space-x-2 shadow-lg transition-all"
             >
               {copiedCotizacion ? <CheckCircle2 size={16} /> : <Send size={16} />}
-              <span>{copiedCotizacion ? '¡Propuesta Copiada!' : 'Copiar Cotización para WhatsApp'}</span>
+              <span>{copiedCotizacion ? '¡Propuesta Copiada!' : 'Copiar Propuesta para WhatsApp'}</span>
             </button>
           </div>
         </div>
