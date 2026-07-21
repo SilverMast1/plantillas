@@ -321,6 +321,33 @@ function App() {
             </form>
           )}
 
+          {/* Acceso Rápido para Demostración Instantánea */}
+          <div className="mt-6 pt-5 border-t border-slate-800/80 space-y-3">
+            <div className="flex items-center justify-between text-xs font-semibold text-amber-400">
+              <span className="flex items-center space-x-1.5">
+                <Sparkles size={14} />
+                <span>Probador Instantáneo de Demo</span>
+              </span>
+              <span className="text-[10px] text-slate-400 font-normal">Sin escribir clave</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setSession('demo-token-admin', { id: 1, nombre: 'Administrador Demo', roles: ['ADMIN', 'VENDEDOR'] }, 'INTERNAL')}
+                className="py-2.5 px-3 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-xl text-xs font-bold transition-all text-center flex items-center justify-center space-x-1"
+              >
+                <span>👑 Entrar como Admin</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSession('demo-token-vendedor', { id: 2, nombre: 'Cajero Demo', roles: ['VENDEDOR'] }, 'INTERNAL')}
+                className="py-2.5 px-3 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 rounded-xl text-xs font-bold transition-all text-center flex items-center justify-center space-x-1"
+              >
+                <span>🛒 Entrar como Cajero</span>
+              </button>
+            </div>
+          </div>
+
           {/* Formulario 2: Entrada de Empleados (Con simulación de huella digital) */}
           {activeTab === 'entrada-empleado' && (
             <form onSubmit={handleRegistroAsistencia} className="space-y-6">

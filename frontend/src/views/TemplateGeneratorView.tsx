@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Download, Sparkles, Database, Layers, CheckCircle2, Copy, RefreshCw, Eye, Settings, Store, Utensils, Flag, ShoppingBag } from 'lucide-react';
+import { Download, Sparkles, Database, Layers, CheckCircle2, Copy, RefreshCw, Eye, Settings, Store, Utensils, Flag, ShoppingBag, Rocket, DollarSign, Send } from 'lucide-react';
+import { useStore } from '../store';
 
 interface Preset {
   id: string;
@@ -58,6 +59,7 @@ const PRESETS: Preset[] = [
 ];
 
 export default function TemplateGeneratorView() {
+  const { setCurrentView } = useStore();
   const [selectedPreset, setSelectedPreset] = useState<string>('restaurante');
   const [dbProvider, setDbProvider] = useState<'sqlite' | 'postgresql'>('sqlite');
   const [companyName, setCompanyName] = useState('Mi Negocio');
@@ -74,6 +76,11 @@ export default function TemplateGeneratorView() {
   });
 
   const [copiedConfig, setCopiedConfig] = useState(false);
+  const [copiedCotizacion, setCopiedCotizacion] = useState(false);
+
+  // Cotizador Comercial
+  const [precioBase, setPrecioBase] = useState(3500);
+  const [costoSoporte, setCostoSoporte] = useState(500);
 
   const applyPreset = (presetId: string) => {
     const preset = PRESETS.find(p => p.id === presetId);
@@ -121,7 +128,7 @@ export default function TemplateGeneratorView() {
     setTimeout(() => setCopiedConfig(false), 2500);
   };
 
-  const handleDownloadZip = () => {
+  const handleDownloadJson = () => {
     const jsonStr = getGeneratedJSON();
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -131,20 +138,43 @@ export default function TemplateGeneratorView() {
     a.click();
   };
 
+  const activeModulesCount = Object.values(features).filter(Boolean).length;
+  const precioTotalCalculado = precioBase + (activeModulesCount > 4 ? 1000 : 0) + (dbProvider === 'postgresql' ? 800 : 0);
+
+  const handleCopyCotizacionWhatsApp = () => {
+    const texto = `Hola ${companyName}! 🚀
+Te presento la propuesta para tu nuevo Sistema de Punto de Venta (${appName}):
+
+📌 *Incluye:*
+• Marca y Logo Personalizado (${companyName})
+• Motor de Base de datos: ${dbProvider.toUpperCase()}
+• Módulos activos (${activeModulesCount}): ${Object.entries(features).filter(([_, v]) => v).map(([k]) => k).join(', ')}
+• Soporte Multicaja y Control de Turnos
+• Funcionamiento Offline y Reportes
+
+💰 *Inversión Total:* $${precioTotalCalculado.toLocaleString('es-MX')} MXN (Pago Único sin mensualidad obligatoria)
+
+¿Te gustaría agendar una demo en vivo?`;
+
+    navigator.clipboard.writeText(texto);
+    setCopiedCotizacion(true);
+    setTimeout(() => setCopiedCotizacion(false), 2500);
+  };
+
   return (
     <div className="space-y-8 pb-12">
-      {/* Header Banner */}
-      <div className="glass-card p-6 sm:p-8 rounded-3xl border border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 relative overflow-hidden">
+      {/* Header Banner estilo Presentación de Producto */}
+      <div className="glass-card p-6 sm:p-8 rounded-3xl border border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/50 relative overflow-hidden">
         <div className="max-w-3xl space-y-3 relative z-10">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-campestre-gold/10 border border-campestre-gold/30 text-campestre-gold text-xs font-bold uppercase tracking-wider">
             <Sparkles size={14} />
             <span>Generador & Catálogo de Plantillas POS</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight Outfit">
-            Configura y Exporta tu Sistema a la Medida
+            Personaliza y Demuestra la Plantilla a tu Cliente
           </h1>
           <p className="text-sm text-slate-300 leading-relaxed">
-            Selecciona una plantilla predeterminada o personaliza visualmente qué botones, marca y base de datos incluirá tu nuevo sistema POS.
+            Selecciona un estilo predefinido o personaliza los botones, logo y base de datos. Puedes probar la plantilla terminada en tiempo real o descargar la configuración.
           </p>
         </div>
       </div>
@@ -270,14 +300,23 @@ export default function TemplateGeneratorView() {
           </div>
         </div>
 
-        {/* Columna Derecha: Vista Previa en Vivo y Exportación */}
+        {/* Columna Derecha: Vista Previa, Botón de Demo Directa y Cotizador Comercial */}
         <div className="space-y-6">
           {/* Vista Previa Interactiva */}
           <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-            <h2 className="text-base font-bold text-white flex items-center space-x-2">
-              <Eye size={18} className="text-amber-400" />
-              <span>Vista Previa de la Interfaz Generada</span>
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-bold text-white flex items-center space-x-2">
+                <Eye size={18} className="text-amber-400" />
+                <span>Vista Previa de la Interfaz</span>
+              </h2>
+              <button
+                onClick={() => setCurrentView('pos')}
+                className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-extrabold rounded-xl shadow-lg flex items-center space-x-1 transition-all"
+              >
+                <Rocket size={14} />
+                <span>Ir al POS en Vivo</span>
+              </button>
+            </div>
 
             {/* Simulador de Header */}
             <div className="bg-slate-950 rounded-xl p-4 border border-slate-800 space-y-4">
@@ -313,20 +352,16 @@ export default function TemplateGeneratorView() {
           <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
             <h2 className="text-base font-bold text-white flex items-center space-x-2">
               <Download size={18} className="text-emerald-400" />
-              <span>3. Exportar Plantilla Configurada</span>
+              <span>3. Exportar Configuración</span>
             </h2>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Descarga la configuración generada para aplicarla a tu nuevo proyecto o copiarla a tu repositorio de GitHub.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
-                onClick={handleDownloadZip}
+                onClick={handleDownloadJson}
                 className="flex-1 btn-gold py-3 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 shadow-lg"
               >
                 <Download size={16} />
-                <span>Descargar Configuración (.json)</span>
+                <span>Descargar JSON (.json)</span>
               </button>
 
               <button
@@ -334,9 +369,34 @@ export default function TemplateGeneratorView() {
                 className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 transition-all border border-slate-700"
               >
                 {copiedConfig ? <CheckCircle2 size={16} className="text-emerald-400" /> : <Copy size={16} />}
-                <span>{copiedConfig ? '¡Copiado al Portapapeles!' : 'Copiar Configuración JSON'}</span>
+                <span>{copiedConfig ? '¡Copiado!' : 'Copiar Configuración'}</span>
               </button>
             </div>
+          </div>
+
+          {/* Cotizador Comercial para Vender al Cliente */}
+          <div className="glass-card p-6 rounded-2xl border border-amber-500/20 bg-gradient-to-br from-slate-900 to-amber-950/20 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-bold text-amber-400 flex items-center space-x-2">
+                <DollarSign size={18} />
+                <span>Cotizador de Venta Rápida</span>
+              </h2>
+              <span className="text-xs font-extrabold text-emerald-400 font-mono bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                ${precioTotalCalculado.toLocaleString('es-MX')} MXN
+              </span>
+            </div>
+
+            <p className="text-xs text-slate-300">
+              Genera una propuesta económica lista para enviar a tu cliente por WhatsApp.
+            </p>
+
+            <button
+              onClick={handleCopyCotizacionWhatsApp}
+              className="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-extrabold text-xs flex items-center justify-center space-x-2 shadow-lg transition-all"
+            >
+              {copiedCotizacion ? <CheckCircle2 size={16} /> : <Send size={16} />}
+              <span>{copiedCotizacion ? '¡Propuesta Copiada!' : 'Copiar Cotización para WhatsApp'}</span>
+            </button>
           </div>
         </div>
       </div>
