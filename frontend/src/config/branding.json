@@ -1,0 +1,10 @@
+{
+  "appName": "POS SYSTEM",
+  "companyName": "TU EMPRESA",
+  "tagline": "Sistema de Punto de Venta",
+  "logoUrl": "",
+  "theme": {
+    "primaryColor": "#1c663c",
+    "accentColor": "#c5a059"
+  }
+}

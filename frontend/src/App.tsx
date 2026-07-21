@@ -12,6 +12,7 @@ const VentasTurnoView = lazy(() => import('./views/VentasTurnoView'));
 import { Shield, Users, LogOut, Menu, UserCheck, Lock, Fingerprint, CheckCircle2, RefreshCw, Sun, Moon } from 'lucide-react';
 import Logo from './components/Logo';
 import featuresConfig from './config/features.json';
+import brandingConfig from './config/branding.json';
 
 function App() {
   const { token, userType, user, socio, logout, setSession, tema, toggleTema, currentView, setCurrentView } = useStore();
@@ -417,11 +418,11 @@ function App() {
           <div className="flex items-center space-x-3">
             <Logo size="sm" className="hidden sm:block" />
             <div>
-              <span className="font-extrabold text-sm tracking-tight Outfit block sm:hidden">
-                CCL <span className="gold-gradient-text">Lourdes</span>
+              <span className="font-extrabold text-sm tracking-tight Outfit block sm:hidden text-white">
+                {brandingConfig.companyName}
               </span>
               <span className="text-[9px] text-slate-400 tracking-wider uppercase block">
-                {userType === 'INTERNAL' ? 'Campestre System' : 'Portal del Socio'}
+                {userType === 'INTERNAL' ? brandingConfig.appName : 'Portal del Cliente'}
               </span>
             </div>
           </div>

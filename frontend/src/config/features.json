@@ -1,9 +1,30 @@
 {
-  "pos": { "enabled": true, "label": "Ventas" },
-  "cargos": { "enabled": true, "label": "Cargos a Socios" },
-  "dividirCadi": { "enabled": true, "label": "Dividir Cuentas (Cadi)" },
-  "ventasTurno": { "enabled": true, "label": "Ventas de Turno" },
-  "admin": { "enabled": true, "label": "Gestión Administrativa" },
-  "stock": { "enabled": true, "label": "Inventario y Stock" },
-  "insumos": { "enabled": true, "label": "Insumos de Comida" }
+  "pos": {
+    "enabled": true,
+    "label": "Ventas"
+  },
+  "cargos": {
+    "enabled": true,
+    "label": "Cargos a Socios"
+  },
+  "dividirCadi": {
+    "enabled": false,
+    "label": "Dividir Cuentas (Cadi)"
+  },
+  "ventasTurno": {
+    "enabled": true,
+    "label": "Ventas de Turno"
+  },
+  "admin": {
+    "enabled": true,
+    "label": "Gestión Administrativa"
+  },
+  "stock": {
+    "enabled": true,
+    "label": "Inventario y Stock"
+  },
+  "insumos": {
+    "enabled": false,
+    "label": "Insumos de Comida"
+  }
 }

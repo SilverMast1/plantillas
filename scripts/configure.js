@@ -59,6 +59,27 @@ async function main() {
   fs.writeFileSync(configPath, JSON.stringify(features, null, 2), 'utf-8');
   console.log(`\n✔ Configuración de UI guardada en: ${configPath}`);
 
+  // 3. Personalización de Marca (Branding)
+  console.log('\n3. Personalización de Marca (Branding):');
+  const companyName = await askQuestion('Nombre de la Empresa/Negocio [default: MI NEGOCIO]: ');
+  const appName = await askQuestion('Nombre del Sistema [default: POS SYSTEM]: ');
+  const tagline = await askQuestion('Eslogan / Subtítulo [default: Sistema de Punto de Venta]: ');
+
+  const branding = {
+    appName: appName.trim() || 'POS SYSTEM',
+    companyName: companyName.trim() || 'MI NEGOCIO',
+    tagline: tagline.trim() || 'Sistema de Punto de Venta',
+    logoUrl: '',
+    theme: {
+      primaryColor: '#1c663c',
+      accentColor: '#c5a059'
+    }
+  };
+
+  const brandingPath = path.join(__dirname, '..', 'frontend', 'src', 'config', 'branding.json');
+  fs.writeFileSync(brandingPath, JSON.stringify(branding, null, 2), 'utf-8');
+  console.log(`✔ Marca de la empresa guardada en: ${brandingPath}`);
+
   // Configurar base de datos en Prisma
   const schemaDest = path.join(__dirname, '..', 'backend', 'prisma', 'schema.prisma');
   const schemaHeaderSrc = path.join(__dirname, '..', 'backend', 'prisma', `schema.${dbProvider}.prisma`);
