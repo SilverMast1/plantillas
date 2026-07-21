@@ -1,0 +1,147 @@
+### POS Campestre - REST API Verification Suite
+# Reemplaza @token e @idCuenta con los valores devueltos por el servidor tras iniciar sesión y abrir la cuenta.
+
+@baseUrl = http://localhost:3001/api
+@token = {{loginInterno.response.body.token}}
+@tokenSocio = {{loginSocio.response.body.token}}
+
+###
+# @name loginInterno
+# 1. Inicio de Sesión de Vendedor (Personal Interno)
+POST {{baseUrl}}/auth/login-interno
+Content-Type: application/json
+
+{
+  "username": "vendedor",
+  "password": "vendedor123"
+}
+
+###
+# @name loginAdmin
+# 2. Inicio de Sesión de Administrador
+POST {{baseUrl}}/auth/login-interno
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+# @name loginSocio
+# 3. Inicio de Sesión de Socio (Cliente) - Solo por Nombre
+POST {{baseUrl}}/auth/login-cliente
+Content-Type: application/json
+
+{
+  "nombre": "Juan Pérez García"
+}
+
+###
+# 4. Listar inventario local del área "Palapa" (ID: 3)
+GET {{baseUrl}}/pos/productos/3
+Authorization: Bearer {{token}}
+
+###
+# 5. Listar Cadis activos en ronda (con sus socios asociados)
+GET {{baseUrl}}/cadis/activos
+Authorization: Bearer {{token}}
+
+###
+# @name abrirCuenta
+# 6. Abrir una nueva cuenta en la Palapa (ID: 3) asociada al CADI-045 (ID: 3)
+POST {{baseUrl}}/pos/cuentas/abrir
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "area_id": 3,
+  "cadi_id": 3,
+  "nombre_referencia": "Mesa de Golfistas Hoyo 1"
+}
+
+###
+# @idCuenta = {{abrirCuenta.response.body.id}}
+@idCuenta = 1
+
+###
+# 7. Registrar Consumos (Hamburguesas y Cervezas) en la cuenta abierta
+PUT {{baseUrl}}/pos/cuentas/{{idCuenta}}/consumos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productos": [
+    { "producto_id": 1, "cantidad": 4 },
+    { "producto_id": 4, "cantidad": 2 }
+  ]
+}
+
+###
+# 8. Previsualizar la división (Split) proporcional exacta entre socios del Cadi
+GET {{baseUrl}}/pos/cuentas/{{idCuenta}}/split-preview
+Authorization: Bearer {{token}}
+
+###
+# 9. Pagar y cerrar la cuenta descontando inventario
+POST {{baseUrl}}/pos/cuentas/{{idCuenta}}/pagar
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "pagos": [
+    { "cliente_id": 1, "monto": 249.40, "metodo_pago": "CARGO_SOCIO" },
+    { "cliente_id": 2, "monto": 249.40, "metodo_pago": "TARJETA" }
+  ]
+}
+
+###
+# 10. Portal del Socio: Consultar historial de consumos propios (Socio 1)
+GET {{baseUrl}}/socio/consumos
+Authorization: Bearer {{tokenSocio}}
+
+###
+# 11. Portal del Socio: Obtener/Regenerar código QR seguro
+POST {{baseUrl}}/socio/qr-token
+Authorization: Bearer {{tokenSocio}}
+
+###
+# 12. ADMINISTRADOR: Ajustar stock de Cerveza Corona (ID: 1) en Palapa (ID: 3) a 100 pzas
+# Reemplaza @token con el token de loginAdmin si es necesario.
+PUT {{baseUrl}}/admin/inventario
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "area_id": 3,
+  "producto_id": 1,
+  "nuevo_stock": 100,
+  "motivo": "Entrada de camión de reparto - Reabastecimiento"
+}
+
+###
+# 13. VENDEDOR: Intento fallido de modificar stock (Debe retornar 403)
+# Usando el token de vendedor del loginInterno inicial
+PUT {{baseUrl}}/admin/inventario
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "area_id": 3,
+  "producto_id": 1,
+  "nuevo_stock": 200,
+  "motivo": "Intento de sabotaje de stock"
+}
+
+###
+# 14. STAFF: Registrar un nuevo Socio (Cliente) en el sistema (Por Admin o Vendedor)
+POST {{baseUrl}}/pos/clientes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "codigo_socio": "SOCIO-105",
+  "nombre": "María Elena Ruíz García",
+  "email": "maria@socio.com",
+  "telefono": "555-0105"
+}

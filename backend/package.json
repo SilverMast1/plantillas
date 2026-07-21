@@ -1,0 +1,45 @@
+{
+  "name": "campestre-pos-backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "db:backup": "node scripts/backup.js",
+    "prisma:generate": "prisma generate",
+    "prisma:db-pull": "prisma db pull",
+    "prisma:migrate": "prisma db push",
+    "seed": "ts-node src/seed.ts",
+    "seed:mock": "ts-node src/mock_sales_seeder.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.12.1",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/uuid": "^9.0.8",
+    "bcrypt": "^5.1.1",
+    "better-sqlite3": "^12.11.1",
+    "cors": "^2.8.5",
+    "decimal.js": "^10.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "redis": "^4.6.13",
+    "socket.io": "^4.7.5",
+    "uuid": "^9.0.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.12.7",
+    "@types/nodemon": "^1.19.6",
+    "nodemon": "^3.1.14",
+    "prisma": "^5.12.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5"
+  }
+}

@@ -1,0 +1,342 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Role {
+  id          Int            @id @default(autoincrement())
+  nombre      String         @unique
+  descripcion String?
+  created_at  DateTime       @default(now())
+  updated_at  DateTime       @default(now()) @updatedAt
+  usuarios    UsuarioRole[]
+  permisos    RolPermiso[]
+
+  @@map("roles")
+}
+
+model Usuario {
+  id                   Int                    @id @default(autoincrement())
+  username             String                 @unique
+  password_hash        String
+  nombre               String
+  email                String?                @unique
+  activo               Boolean                @default(true)
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @default(now()) @updatedAt
+  roles                UsuarioRole[]
+  cuentas              Cuenta[]
+  movimientosInventario MovimientoInventario[]
+  turnos               Turno[]
+
+  @@map("usuarios")
+}
+
+model UsuarioRole {
+  usuario_id Int
+  role_id    Int
+  usuario    Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  role       Role    @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  @@id([usuario_id, role_id])
+  @@map("usuario_roles")
+}
+
+model Permiso {
+  id          Int           @id @default(autoincrement())
+  codigo      String        @unique
+  descripcion String?
+  created_at  DateTime      @default(now())
+  roles       RolPermiso[]
+
+  @@map("permisos")
+}
+
+model RolPermiso {
+  role_id    Int
+  permiso_id Int
+  role       Role    @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  permiso    Permiso @relation(fields: [permiso_id], references: [id], onDelete: Cascade)
+
+  @@id([role_id, permiso_id])
+  @@map("rol_permisos")
+}
+
+model Area {
+  id                   Int                    @id @default(autoincrement())
+  nombre               String                 @unique
+  descripcion          String?
+  activo               Boolean                @default(true)
+  created_at           DateTime               @default(now())
+  inventarios          InventarioArea[]
+  movimientosInventario MovimientoInventario[]
+  cuentas              Cuenta[]
+  turnos               Turno[]
+
+  @@map("areas")
+}
+
+model Producto {
+  id                   Int                    @id @default(autoincrement())
+  codigo_barras        String?                @unique
+  nombre               String
+  descripcion          String?
+  precio_venta         Decimal
+  categoria            String?
+  activo               Boolean                @default(true)
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @default(now()) @updatedAt
+  inventarios          InventarioArea[]
+  movimientosInventario MovimientoInventario[]
+  detalleCuentas       DetalleCuenta[]
+  recetas              RecetaIngrediente[]
+
+  @@map("productos")
+  @@index([nombre])
+  @@index([activo])
+}
+
+model InventarioArea {
+  area_id           Int
+  producto_id       Int
+  stock             Decimal  @default(0.0000)
+  stock_minimo      Decimal  @default(0.0000)
+  stock_maximo      Decimal  @default(0.0000)
+  ubicacion_estante String?
+  updated_at        DateTime @default(now()) @updatedAt
+  area              Area     @relation(fields: [area_id], references: [id], onDelete: Restrict)
+  producto          Producto @relation(fields: [producto_id], references: [id], onDelete: Restrict)
+
+  @@id([area_id, producto_id])
+  @@map("inventario_areas")
+}
+
+model MovimientoInventario {
+  id              Int   @id @default(autoincrement())
+  area_id         Int
+  producto_id     Int
+  tipo_movimiento String
+  cantidad        Decimal
+  stock_anterior  Decimal
+  stock_nuevo     Decimal
+  usuario_id      Int
+  referencia_id   String?
+  motivo          String?
+  fecha           DateTime @default(now())
+  area            Area     @relation(fields: [area_id], references: [id], onDelete: Restrict)
+  producto        Producto @relation(fields: [producto_id], references: [id], onDelete: Restrict)
+  usuario         Usuario  @relation(fields: [usuario_id], references: [id], onDelete: Restrict)
+
+  @@map("movimientos_inventario")
+}
+
+model Cliente {
+  id              Int                      @id @default(autoincrement())
+  codigo_socio    String?                  @unique
+  nombre          String
+  email           String?                  @unique
+  password_hash   String?
+  telefono        String?
+  qr_token        String?                  @unique
+  activo          Boolean                  @default(true)
+  created_at      DateTime                 @default(now())
+  updated_at      DateTime                 @default(now()) @updatedAt
+  asignaciones    AsignacionCadiCliente[]
+  divisionesCuentas DivisionCuenta[]
+  cuentas         Cuenta[]
+
+  @@map("clientes")
+  @@index([nombre])
+}
+
+model Cadi {
+  id           Int                      @id @default(autoincrement())
+  numero_cadi  String                   @unique
+  nombre       String
+  telefono     String?
+  estado       String                   @default("DISPONIBLE")
+  created_at   DateTime                 @default(now())
+  updated_at   DateTime                 @default(now()) @updatedAt
+  asignaciones AsignacionCadiCliente[]
+  cuentas      Cuenta[]
+
+  @@map("cadis")
+  @@index([nombre])
+}
+
+model AsignacionCadiCliente {
+  id           Int       @id @default(autoincrement())
+  cadi_id      Int
+  cliente_id   Int
+  fecha_inicio DateTime  @default(now())
+  fecha_fin    DateTime?
+  activa       Boolean   @default(true)
+  created_at   DateTime  @default(now())
+  cadi         Cadi      @relation(fields: [cadi_id], references: [id], onDelete: Restrict)
+  cliente      Cliente   @relation(fields: [cliente_id], references: [id], onDelete: Restrict)
+
+  @@unique([cadi_id, cliente_id, activa], name: "uq_asignacion_activa")
+  @@map("asignaciones_cadi_clientes")
+}
+
+model Cuenta {
+  id                Int          @id @default(autoincrement())
+  area_id           Int
+  usuario_id        Int
+  cadi_id           Int?
+  cliente_id        Int?
+  nombre_referencia String?
+  estado            String          @default("ABIERTA")
+  subtotal          Decimal         @default(0.0000)
+  impuestos         Decimal         @default(0.0000)
+  descuento         Decimal         @default(0.0000)
+  total             Decimal         @default(0.0000)
+  metodo_pago       String?
+  monto_efectivo    Decimal         @default(0.0000)
+  monto_tarjeta     Decimal         @default(0.0000)
+  created_at        DateTime        @default(now())
+  closed_at         DateTime?
+  turno_id          Int?
+  area              Area            @relation(fields: [area_id], references: [id], onDelete: Restrict)
+  usuario           Usuario         @relation(fields: [usuario_id], references: [id], onDelete: Restrict)
+  cadi              Cadi?           @relation(fields: [cadi_id], references: [id], onDelete: SetNull)
+  cliente           Cliente?        @relation(fields: [cliente_id], references: [id], onDelete: SetNull)
+  turno             Turno?          @relation(fields: [turno_id], references: [id], onDelete: SetNull)
+  detalleCuentas    DetalleCuenta[]
+  divisionesCuentas DivisionCuenta[]
+
+  @@map("cuentas")
+  @@index([estado])
+  @@index([turno_id])
+  @@index([area_id])
+  @@index([cliente_id])
+  @@index([cadi_id])
+}
+
+model DetalleCuenta {
+  id              Int   @id @default(autoincrement())
+  cuenta_id       Int
+  producto_id     Int
+  cantidad        Decimal
+  precio_unitario Decimal
+  descuento       Decimal  @default(0.0000)
+  subtotal        Decimal
+  impuestos       Decimal  @default(0.0000)
+  total           Decimal
+  estado_item     String   @default("PEDIDO")
+  notas           String?
+  created_at      DateTime @default(now())
+  cuenta          Cuenta   @relation(fields: [cuenta_id], references: [id], onDelete: Cascade)
+  producto        Producto @relation(fields: [producto_id], references: [id], onDelete: Restrict)
+
+  @@map("detalle_cuentas")
+  @@index([cuenta_id])
+}
+
+model DivisionCuenta {
+  id                       Int    @id @default(autoincrement())
+  cuenta_id                Int
+  cliente_id               Int
+  porcentaje_participacion Decimal
+  monto_proporcional       Decimal
+  metodo_pago              String?
+  monto_efectivo           Decimal   @default(0.0000)
+  monto_tarjeta            Decimal   @default(0.0000)
+  estado_pago              String    @default("PENDIENTE")
+  pagado_at                DateTime?
+  turno_pago_id            Int?
+  cuenta                   Cuenta    @relation(fields: [cuenta_id], references: [id], onDelete: Restrict)
+  cliente                  Cliente   @relation(fields: [cliente_id], references: [id], onDelete: Restrict)
+  turno_pago               Turno?    @relation(fields: [turno_pago_id], references: [id], onDelete: SetNull)
+
+  @@unique([cuenta_id, cliente_id], name: "uq_cuenta_cliente_division")
+  @@map("divisiones_cuentas")
+  @@index([estado_pago])
+  @@index([turno_pago_id])
+  @@index([cliente_id])
+}
+
+model Turno {
+  id             Int          @id @default(autoincrement())
+  usuario_id     Int
+  area_id        Int?
+  fondo_inicial  Decimal
+  caja_efectivo  Decimal      @default(0.0000)
+  caja_tarjeta   Decimal      @default(0.0000)
+  caja_cargos    Decimal      @default(0.0000)
+  caja_transferencia Decimal  @default(0.0000)
+  abierto_at     DateTime     @default(now())
+  cerrado_at     DateTime?
+  activo         Boolean      @default(true)
+  usuario        Usuario      @relation(fields: [usuario_id], references: [id], onDelete: Restrict)
+  area           Area?        @relation(fields: [area_id], references: [id], onDelete: Restrict)
+  cuentas        Cuenta[]
+  retiros        RetiroCaja[]
+  divisiones_pagadas DivisionCuenta[]
+
+  @@map("turnos")
+  @@index([activo])
+}
+
+model RetiroCaja {
+  id          Int      @id @default(autoincrement())
+  turno_id    Int
+  monto       Decimal
+  motivo      String
+  tipo        String   @default("RETIRO") // "RETIRO" o "INGRESO"
+  created_at  DateTime @default(now())
+  turno       Turno    @relation(fields: [turno_id], references: [id], onDelete: Cascade)
+
+  @@map("retiros_caja")
+}
+
+model Insumo {
+  id           Int                 @id @default(autoincrement())
+  nombre       String              @unique
+  stock        Decimal             @default(0.0000)
+  unidad       String
+  stock_minimo Decimal             @default(0.0000)
+  created_at   DateTime            @default(now())
+  updated_at   DateTime            @default(now()) @updatedAt
+  recetas      RecetaIngrediente[]
+
+  @@map("insumos")
+}
+
+model RecetaIngrediente {
+  producto_id Int
+  insumo_id   Int
+  cantidad    Decimal
+  producto    Producto @relation(fields: [producto_id], references: [id], onDelete: Cascade)
+  insumo      Insumo   @relation(fields: [insumo_id], references: [id], onDelete: Cascade)
+
+  @@id([producto_id, insumo_id])
+  @@map("receta_ingredientes")
+}
+
+model GastoIngresoCCL {
+  id             Int      @id @default(autoincrement())
+  fecha          DateTime
+  tipo_registro  String
+  concepto       String
+  monto          Decimal
+  metodo_pago    String
+  created_at     DateTime @default(now())
+
+  @@map("gastos_ingresos_ccl")
+}
+
+model IdempotencyKey {
+  key             String   @id
+  status          String
+  response_status Int?
+  response_body   String?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @default(now()) @updatedAt
+
+  @@map("idempotency_keys")
+}

@@ -1,0 +1,968 @@
+[
+  {
+    "id": 457,
+    "nombre": "1/2 menudo",
+    "precio_venta": "80",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 423,
+    "nombre": "Aderezo Extra",
+    "precio_venta": "35",
+    "categoria": "cenas",
+    "activo": false
+  },
+  {
+    "id": 397,
+    "nombre": "Agua Mineral",
+    "precio_venta": "35",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 545,
+    "nombre": "Agua Mineral Grande",
+    "precio_venta": "0",
+    "categoria": "Bebidas",
+    "activo": true
+  },
+  {
+    "id": 398,
+    "nombre": "Agua Mineral Prep",
+    "precio_venta": "45",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 399,
+    "nombre": "Agua Natural 500 ml",
+    "precio_venta": "20",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 396,
+    "nombre": "Agua de sabor",
+    "precio_venta": "35",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 400,
+    "nombre": "Agua natural Lt",
+    "precio_venta": "30",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 401,
+    "nombre": "Agua tonica",
+    "precio_venta": "30",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 402,
+    "nombre": "Amper",
+    "precio_venta": "40",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 432,
+    "nombre": "Amstel Ultra",
+    "precio_venta": "35",
+    "categoria": "cervezas",
+    "activo": true
+  },
+  {
+    "id": 447,
+    "nombre": "Arroz frito c/ verduras",
+    "precio_venta": "75",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 470,
+    "nombre": "Bacardi Añejo prep",
+    "precio_venta": "60",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 471,
+    "nombre": "Bacardi Añejo shot",
+    "precio_venta": "50",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 472,
+    "nombre": "Bacardi Bco prep",
+    "precio_venta": "60",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 473,
+    "nombre": "Bacardi Bco. Botella",
+    "precio_venta": "499",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 474,
+    "nombre": "Bacardi Bco. Shot",
+    "precio_venta": "50",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 469,
+    "nombre": "Bacardi añejo Botella",
+    "precio_venta": "499",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 475,
+    "nombre": "Beefeater Botella",
+    "precio_venta": "799",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 497,
+    "nombre": "Black & White Botella",
+    "precio_venta": "480",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 498,
+    "nombre": "Black & White Prep",
+    "precio_venta": "70",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 499,
+    "nombre": "Black & White Shot",
+    "precio_venta": "50",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 424,
+    "nombre": "Boneless",
+    "precio_venta": "109",
+    "categoria": "cenas",
+    "activo": true
+  },
+  {
+    "id": 500,
+    "nombre": "Buchanans 12 Botella",
+    "precio_venta": "999",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 502,
+    "nombre": "Buchanans 12 Shot",
+    "precio_venta": "75",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 501,
+    "nombre": "Buchanans 12 prep",
+    "precio_venta": "95",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 413,
+    "nombre": "Cacahuates con ajo",
+    "precio_venta": "35",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 414,
+    "nombre": "Cacahuates japoneses",
+    "precio_venta": "20",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 415,
+    "nombre": "Cacahuates salados",
+    "precio_venta": "30",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 476,
+    "nombre": "Capitan Morgan Botella",
+    "precio_venta": "450",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 477,
+    "nombre": "Capitan Morgan prep",
+    "precio_venta": "60",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 478,
+    "nombre": "Capitan Morgan shot",
+    "precio_venta": "50",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 433,
+    "nombre": "Carta Blanca",
+    "precio_venta": "30",
+    "categoria": "cervezas",
+    "activo": true
+  },
+  {
+    "id": 512,
+    "nombre": "Centenario Añejo",
+    "precio_venta": "100",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 513,
+    "nombre": "Centenario plata botella",
+    "precio_venta": "798",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 514,
+    "nombre": "Centenario plata prep",
+    "precio_venta": "70",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 515,
+    "nombre": "Centenario plata shot",
+    "precio_venta": "50",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 448,
+    "nombre": "Chicharron de Ribeye",
+    "precio_venta": "290",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 416,
+    "nombre": "Chicharrones",
+    "precio_venta": "30",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 459,
+    "nombre": "Chilaquiles",
+    "precio_venta": "110",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 503,
+    "nombre": "Chivas 12 Botella",
+    "precio_venta": "999",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 505,
+    "nombre": "Chivas 12 Shot",
+    "precio_venta": "75",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 504,
+    "nombre": "Chivas 12 prep",
+    "precio_venta": "95",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 417,
+    "nombre": "Chocolate",
+    "precio_venta": "40",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 418,
+    "nombre": "Cigarro suelto",
+    "precio_venta": "10",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 419,
+    "nombre": "Cigarros caja",
+    "precio_venta": "100",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 403,
+    "nombre": "Coca Vidrio",
+    "precio_venta": "30",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 546,
+    "nombre": "Consumo General",
+    "precio_venta": "0",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 425,
+    "nombre": "Dedos de queso",
+    "precio_venta": "99",
+    "categoria": "cenas",
+    "activo": true
+  },
+  {
+    "id": 446,
+    "nombre": "Descuento Empleado",
+    "precio_venta": "0",
+    "categoria": "descuentos",
+    "activo": true
+  },
+  {
+    "id": 516,
+    "nombre": "Don Julio 70 Botella",
+    "precio_venta": "1499",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 517,
+    "nombre": "Don Julio 70 Prep",
+    "precio_venta": "130",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 518,
+    "nombre": "Don Julio 70 Shot",
+    "precio_venta": "110",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 519,
+    "nombre": "Don Julio Reposado Botella",
+    "precio_venta": "1299",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 520,
+    "nombre": "Don Julio Reposado Prep",
+    "precio_venta": "120",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 521,
+    "nombre": "Don Julio Reposado Shot",
+    "precio_venta": "100",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 479,
+    "nombre": "Don Pedro Botella",
+    "precio_venta": "399",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 480,
+    "nombre": "Don Pedro Prep",
+    "precio_venta": "60",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 481,
+    "nombre": "Don Pedro Shot",
+    "precio_venta": "50",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 404,
+    "nombre": "Electrolit",
+    "precio_venta": "38",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 449,
+    "nombre": "Enchiladas Suizas",
+    "precio_venta": "110",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 506,
+    "nombre": "Etiq. Negra Botella",
+    "precio_venta": "1099",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 507,
+    "nombre": "Etiq. Negra Prep.",
+    "precio_venta": "95",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 508,
+    "nombre": "Etiq. Negra Shot",
+    "precio_venta": "75",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 509,
+    "nombre": "Etiq. Roja Botella",
+    "precio_venta": "499",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 510,
+    "nombre": "Etiq. Roja prep",
+    "precio_venta": "70",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 511,
+    "nombre": "Etiq. Roja shot",
+    "precio_venta": "50",
+    "categoria": "whisky",
+    "activo": true
+  },
+  {
+    "id": 426,
+    "nombre": "Extra papas",
+    "precio_venta": "20",
+    "categoria": "cenas",
+    "activo": true
+  },
+  {
+    "id": 460,
+    "nombre": "Fruta con yogurt",
+    "precio_venta": "75",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 405,
+    "nombre": "Fuze tea",
+    "precio_venta": "33",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 420,
+    "nombre": "Galletas",
+    "precio_venta": "30",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 406,
+    "nombre": "Gatorade",
+    "precio_venta": "38",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 489,
+    "nombre": "Gorditas",
+    "precio_venta": "33",
+    "categoria": "tacos de guisos",
+    "activo": true
+  },
+  {
+    "id": 523,
+    "nombre": "Hacienda tepa botella",
+    "precio_venta": "799",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 524,
+    "nombre": "Hacienda tepa prep",
+    "precio_venta": "70",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 522,
+    "nombre": "Hacienda tepa shot",
+    "precio_venta": "50",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 427,
+    "nombre": "Hamburguesa",
+    "precio_venta": "115",
+    "categoria": "cenas",
+    "activo": true
+  },
+  {
+    "id": 428,
+    "nombre": "Hotdog",
+    "precio_venta": "69",
+    "categoria": "cenas",
+    "activo": true
+  },
+  {
+    "id": 461,
+    "nombre": "Huevos al gusto",
+    "precio_venta": "80",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 462,
+    "nombre": "Huevos divorciados",
+    "precio_venta": "85",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 434,
+    "nombre": "Indio",
+    "precio_venta": "28",
+    "categoria": "cervezas",
+    "activo": true
+  },
+  {
+    "id": 407,
+    "nombre": "Jugo de naranja",
+    "precio_venta": "45",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 408,
+    "nombre": "Juguito Jumex",
+    "precio_venta": "25",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 421,
+    "nombre": "Kinder delice",
+    "precio_venta": "25",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 525,
+    "nombre": "Maestro Dobel Botella",
+    "precio_venta": "1299",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 526,
+    "nombre": "Maestro Dobel Prep",
+    "precio_venta": "120",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 527,
+    "nombre": "Maestro Dobel Shot",
+    "precio_venta": "100",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 482,
+    "nombre": "Matusalem Platino Botella",
+    "precio_venta": "599",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 483,
+    "nombre": "Matusalem Platino prep",
+    "precio_venta": "60",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 484,
+    "nombre": "Matusalem Platino shot",
+    "precio_venta": "50",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 458,
+    "nombre": "Menudo",
+    "precio_venta": "110",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 435,
+    "nombre": "Miller High Life",
+    "precio_venta": "40",
+    "categoria": "cervezas",
+    "activo": true
+  },
+  {
+    "id": 463,
+    "nombre": "Molletes",
+    "precio_venta": "69",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 464,
+    "nombre": "Molletes Especiales",
+    "precio_venta": "85",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 409,
+    "nombre": "Monster",
+    "precio_venta": "55",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 467,
+    "nombre": "Nuggets con papas",
+    "precio_venta": "85",
+    "categoria": "ni├▒os",
+    "activo": true
+  },
+  {
+    "id": 465,
+    "nombre": "Omelette",
+    "precio_venta": "79",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 450,
+    "nombre": "Panini de pollo al chipotle",
+    "precio_venta": "95",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 429,
+    "nombre": "Papas a la francesa",
+    "precio_venta": "69",
+    "categoria": "cenas",
+    "activo": true
+  },
+  {
+    "id": 430,
+    "nombre": "Papas preparadas",
+    "precio_venta": "89",
+    "categoria": "cenas",
+    "activo": true
+  },
+  {
+    "id": 451,
+    "nombre": "Pechuga de pollo",
+    "precio_venta": "110",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 410,
+    "nombre": "Pe├▒afiel Twist",
+    "precio_venta": "33",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 452,
+    "nombre": "Platillo",
+    "precio_venta": "95",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 411,
+    "nombre": "Powerade",
+    "precio_venta": "38",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 436,
+    "nombre": "Prep Chelada",
+    "precio_venta": "65",
+    "categoria": "cervezas",
+    "activo": true
+  },
+  {
+    "id": 437,
+    "nombre": "Prep. Clamato",
+    "precio_venta": "35",
+    "categoria": "cervezas",
+    "activo": true
+  },
+  {
+    "id": 438,
+    "nombre": "Prep. Michelada",
+    "precio_venta": "70",
+    "categoria": "cervezas",
+    "activo": true
+  },
+  {
+    "id": 441,
+    "nombre": "Puro Don gal coronita",
+    "precio_venta": "100",
+    "categoria": "cigarros",
+    "activo": true
+  },
+  {
+    "id": 442,
+    "nombre": "Puro don gal doble robusto",
+    "precio_venta": "150",
+    "categoria": "cigarros",
+    "activo": true
+  },
+  {
+    "id": 443,
+    "nombre": "Puro don gal robusto",
+    "precio_venta": "120",
+    "categoria": "cigarros",
+    "activo": true
+  },
+  {
+    "id": 444,
+    "nombre": "Puro gabriel'o robusto",
+    "precio_venta": "120",
+    "categoria": "cigarros",
+    "activo": true
+  },
+  {
+    "id": 445,
+    "nombre": "Puro grabiel'o coronita",
+    "precio_venta": "100",
+    "categoria": "cigarros",
+    "activo": true
+  },
+  {
+    "id": 490,
+    "nombre": "Quesadilla con guiso",
+    "precio_venta": "33",
+    "categoria": "tacos de guisos",
+    "activo": true
+  },
+  {
+    "id": 466,
+    "nombre": "Quesadillas",
+    "precio_venta": "70",
+    "categoria": "desayunos",
+    "activo": true
+  },
+  {
+    "id": 453,
+    "nombre": "Queso fundido",
+    "precio_venta": "139",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 412,
+    "nombre": "Refresco",
+    "precio_venta": "33",
+    "categoria": "bebidas",
+    "activo": true
+  },
+  {
+    "id": 422,
+    "nombre": "Sabritas",
+    "precio_venta": "25",
+    "categoria": "botanas",
+    "activo": true
+  },
+  {
+    "id": 491,
+    "nombre": "Taco de barbacoa",
+    "precio_venta": "28",
+    "categoria": "tacos de guisos",
+    "activo": true
+  },
+  {
+    "id": 492,
+    "nombre": "Taco de chicharron",
+    "precio_venta": "28",
+    "categoria": "tacos de guisos",
+    "activo": true
+  },
+  {
+    "id": 493,
+    "nombre": "Taco de choriqueso",
+    "precio_venta": "28",
+    "categoria": "tacos de guisos",
+    "activo": true
+  },
+  {
+    "id": 494,
+    "nombre": "Taco de huevo",
+    "precio_venta": "24",
+    "categoria": "tacos de guisos",
+    "activo": true
+  },
+  {
+    "id": 495,
+    "nombre": "Taco de papa c/ chorizo",
+    "precio_venta": "24",
+    "categoria": "tacos de guisos",
+    "activo": true
+  },
+  {
+    "id": 496,
+    "nombre": "Taco de picadillo",
+    "precio_venta": "24",
+    "categoria": "tacos de guisos",
+    "activo": true
+  },
+  {
+    "id": 431,
+    "nombre": "Tacos de bistec",
+    "precio_venta": "110",
+    "categoria": "cenas",
+    "activo": true
+  },
+  {
+    "id": 454,
+    "nombre": "Tacos de fideo c/ chicharron",
+    "precio_venta": "149",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 439,
+    "nombre": "Tecate Light",
+    "precio_venta": "28",
+    "categoria": "cervezas",
+    "activo": true
+  },
+  {
+    "id": 468,
+    "nombre": "Tenders con papas",
+    "precio_venta": "95",
+    "categoria": "ni├▒os",
+    "activo": true
+  },
+  {
+    "id": 455,
+    "nombre": "Tiradito de at├║n",
+    "precio_venta": "195",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 456,
+    "nombre": "Tostada de ceviche de pescado",
+    "precio_venta": "65",
+    "categoria": "comida",
+    "activo": true
+  },
+  {
+    "id": 528,
+    "nombre": "Tradicional Repo Botella",
+    "precio_venta": "799",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 530,
+    "nombre": "Tradicional Reposado",
+    "precio_venta": "50",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 529,
+    "nombre": "Tradicional repo prep",
+    "precio_venta": "70",
+    "categoria": "tequilas",
+    "activo": true
+  },
+  {
+    "id": 485,
+    "nombre": "Util",
+    "precio_venta": "0",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 486,
+    "nombre": "Vodka Botella",
+    "precio_venta": "499",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 487,
+    "nombre": "Vodka Prep",
+    "precio_venta": "70",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 488,
+    "nombre": "Vodka Shot",
+    "precio_venta": "50",
+    "categoria": "ron, brandy y vodka",
+    "activo": true
+  },
+  {
+    "id": 440,
+    "nombre": "XX Lager",
+    "precio_venta": "30",
+    "categoria": "cervezas",
+    "activo": true
+  },
+  {
+    "id": 547,
+    "nombre": "borrarcuenta",
+    "precio_venta": "0.01",
+    "categoria": "cigarros",
+    "activo": true
+  }
+]

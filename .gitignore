@@ -1,0 +1,42 @@
+# Variables de Entorno y Credenciales
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# Dependencias
+node_modules/
+jspm_packages/
+web_modules/
+
+# Compilaciones y Salidas
+dist/
+build/
+out/
+.next/
+.nuxt/
+bin/
+obj/
+
+# Logs e Historial
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.lerna/
+.npm/
+
+# IDEs y Editores
+.vscode/
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos del Sistema Operativo
+.DS_Store
+Thumbs.db

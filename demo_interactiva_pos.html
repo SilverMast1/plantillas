@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⛳ Campestre System</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --campestre-green: #1c663c;
+      --campestre-green-dark: #0f3a21;
+      --campestre-gold: #c5a059;
+      --campestre-dark: #0b0f19;
+    }
+
+    body {
+      background-color: #0b0f19;
+      color: #f8fafc;
+      font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    }
+
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #f5dfa3 0%, #c5a059 50%, #8b6c31 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .input-premium {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 10px 16px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .input-premium:focus {
+      border-color: var(--campestre-gold);
+      box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.25);
+    }
+
+    .btn-premium {
+      transition: all 0.2s;
+    }
+    .btn-premium:active {
+      transform: scale(0.98);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(197, 160, 89, 0.4);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(197, 160, 89, 0.7);
+    }
+  </style>
+
+  <script>
+    if (window.tailwind) {
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              campestre: {
+                green: {
+                  light: '#d2f1d2',
+                  DEFAULT: '#1c663c',
+                  dark: '#0f3a21',
+                },
+                gold: {
+                  light: '#f5dfa3',
+                  DEFAULT: '#c5a059',
+                  dark: '#8b6c31',
+                },
+                dark: {
+                  DEFAULT: '#0f172a',
+                  light: '#1e293b',
+                }
+              }
+            },
+            fontFamily: {
+              sans: ['Outfit', 'Inter', 'sans-serif'],
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0b0f19]">
+
+  <!-- Header principal -->
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="text-2xl">⛳</span>
+        <div>
+          <span class="font-extrabold text-lg tracking-tight block">
+            Campestre <span class="gold-gradient-text font-bold">System</span>
+          </span>
+          <span class="text-[10px] text-slate-400 tracking-wider uppercase block font-semibold" id="header-subtitle">
+            Demo Virtual / Iniciar Sesión
+          </span>
+        </div>
+      </div>
+
+      <!-- Barra de Estado / Navegación según Rol -->
+      <div class="flex items-center space-x-4">
+        <!-- Switcher de vistas para ADMIN y VENDEDOR con turno abierto -->
+        <div id="staff-switcher" class="hidden flex space-x-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
+          <!-- Botón Panel de Control (Solo Admin) -->
+          <button
+            onclick="cambiarVistaStaff('ADMIN')"
+            id="nav-admin-view"
+            class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200 hidden"
+          >
+            ⚙️ Panel Control
+          </button>
+          
+          <!-- Botón POS (Vendedor y Admin) -->
+          <button
+            onclick="cambiarVistaStaff('POS')"
+            id="nav-staff-pos"
+            class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200"
+          >
+            📱 POS Venta
+          </button>
+
+          <!-- Botón Historial de Turno (Vendedor y Admin) -->
+          <button
+            onclick="cambiarVistaStaff('HISTORIAL')"
+            id="nav-staff-historial"
+            class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200"
+          >
+            📋 Historial Turno
+          </button>
+
+          <!-- Botón Gestión (Vendedor y Admin: Adeudos, Cadis, Socios) -->
+          <button
+            onclick="cambiarVistaStaff('GESTION')"
+            id="nav-staff-gestion"
+            class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200"
+          >
+            🗂️ Gestión
+          </button>
+        </div>
+
+        <!-- Botón de Cerrar Sesión -->
+        <div id="user-session-info" class="hidden flex items-center space-x-3">
+          <span class="text-xs text-slate-350 font-medium" id="txt-rol-activo">Rol: Admin</span>
+          <button
+            onclick="cerrarSesion()"
+            class="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-bold rounded-lg border border-red-500/15"
+          >
+            Salir 🚪
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Área principal -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col justify-center">
+
+    <!-- 1. PANTALLA DE LOGINS SEPARADOS (LOCK SCREEN) -->
+    <div id="view-lock-screen" class="max-w-md w-full mx-auto glass-card rounded-3xl p-8 border border-slate-800 shadow-2xl space-y-6">
+      <div class="text-center">
+        <span class="text-4xl block mb-2">🔒</span>
+        <h2 class="text-xl font-bold Outfit">Acceso de Personal y Socios</h2>
+        <p class="text-xs text-slate-400 mt-1">Selecciona tu perfil de acceso para ingresar al sistema.</p>
+      </div>
+
+      <div class="flex border-b border-slate-800 bg-slate-950 p-1 rounded-xl">
+        <button
+          onclick="cambiarTabLogin('socio')"
+          id="tab-login-socio"
+          class="flex-1 py-1.5 text-center text-xs font-semibold rounded-lg bg-campestre-gold text-slate-950 shadow-sm"
+        >
+          👤 Socio
+        </button>
+        <button
+          onclick="cambiarTabLogin('vendedor')"
+          id="tab-login-vendedor"
+          class="flex-1 py-1.5 text-center text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200"
+        >
+          📱 Vendedor
+        </button>
+        <button
+          onclick="cambiarTabLogin('admin')"
+          id="tab-login-admin"
+          class="flex-1 py-1.5 text-center text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200"
+        >
+          ⚙️ Superadmin
+        </button>
+      </div>
+
+      <div id="login-error-msg" class="bg-red-500/10 text-red-400 text-xs p-3 rounded-xl border border-red-500/20 text-center font-medium hidden"></div>
+
+      <!-- Formulario SOCIO -->
+      <div id="form-login-socio" class="space-y-4">
+        <div>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Nombre Completo del Socio</label>
+          <input
+            type="text"
+            id="input-login-socio-nombre"
+            placeholder="Escribe tu nombre (ej. Juan Pérez García)"
+            class="w-full input-premium text-xs placeholder-slate-500"
+          />
+        </div>
+        <button
+          onclick="procesarLoginSocio()"
+          class="w-full py-3 bg-campestre-gold hover:bg-campestre-gold/90 text-slate-950 font-bold rounded-xl btn-premium text-xs shadow-lg shadow-campestre-gold/15"
+        >
+          Ingresar al Portal de Socios
+        </button>
+        <p class="text-[9px] text-slate-500 text-center font-medium">Socios demo: <b>Juan Pérez García</b> | <b>Luis Gómez Cantú</b></p>
+      </div>
+
+      <!-- Formulario VENDEDOR -->
+      <div id="form-login-vendedor" class="space-y-4 hidden">
+        <div>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Usuario del POS</label>
+          <input
+            type="text"
+            id="input-login-vendedor-user"
+            placeholder="Escribe tu usuario"
+            class="w-full input-premium text-xs placeholder-slate-500"
+          />
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Contraseña de Vendedor</label>
+          <input
+            type="password"
+            id="input-login-vendedor-pass"
+            placeholder="••••••••"
+            class="w-full input-premium text-xs placeholder-slate-500"
+          />
+        </div>
+        <button
+          onclick="procesarLoginVendedor()"
+          class="w-full py-3 bg-campestre-green hover:bg-campestre-green/95 text-white font-bold rounded-xl btn-premium text-xs shadow-lg shadow-campestre-green/15"
+        >
+          Ingresar a Caja (POS)
+        </button>
+        <p class="text-[9px] text-slate-500 text-center font-medium">Acceso demo: Usuario <b>vendedor</b> | Contraseña <b>vendedor123</b></p>
+      </div>
+
+      <!-- Formulario ADMIN -->
+      <div id="form-login-admin" class="space-y-4 hidden">
+        <div>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Usuario Administrador</label>
+          <input
+            type="text"
+            id="input-login-admin-user"
+            placeholder="Escribe tu usuario"
+            class="w-full input-premium text-xs placeholder-slate-500"
+          />
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Contraseña de Superadmin</label>
+          <input
+            type="password"
+            id="input-login-admin-pass"
+            placeholder="••••••••"
+            class="w-full input-premium text-xs placeholder-slate-500"
+          />
+        </div>
+        <button
+          onclick="procesarLoginAdmin()"
+          class="w-full py-3 bg-slate-800 hover:bg-slate-750 text-white font-bold rounded-xl btn-premium text-xs border border-slate-700 shadow-lg"
+        >
+          Ingresar al Panel Administrativo
+        </button>
+        <p class="text-[9px] text-slate-500 text-center font-medium">Acceso demo: Usuario <b>admin</b> | Contraseña <b>admin123</b></p>
+      </div>
+    </div>
+
+    <!-- 2. PANTALLA DE APERTURA DE TURNO (Caja Cerrada) -->
+    <div id="view-turno-cerrado" class="max-w-md w-full mx-auto glass-card rounded-3xl p-8 border border-slate-800 shadow-2xl text-center space-y-6 hidden">
+      <span class="text-4xl block mb-2">💰</span>
+      <h3 class="text-lg font-bold Outfit">Caja Registradora Cerrada</h3>
+      <p class="text-xs text-slate-400">Es necesario abrir el turno de caja y definir un fondo inicial de efectivo para comenzar a operar el sistema.</p>
+
+      <div class="space-y-4 text-left">
+        <div>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Fondo Inicial de Efectivo (MXN)</label>
+          <input
+            type="number"
+            id="input-fondo-inicial"
+            value="1000"
+            min="0"
+            class="w-full input-premium text-sm font-bold text-emerald-400 font-sans"
+          />
+        </div>
+        <button
+          onclick="abrirTurnoActivo()"
+          class="w-full py-3 bg-campestre-green hover:bg-campestre-green/95 text-white font-bold rounded-xl btn-premium text-xs shadow-lg shadow-campestre-green/20"
+        >
+          Abrir Turno de Venta
+        </button>
+      </div>
+    </div>
+
+    <!-- 3. PANTALLA POS (Vendedor/Admin) -->
+    <div id="view-pos" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Selector de Áreas -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-800 flex justify-between items-center">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Área Física:</h2>
+          <div class="flex space-x-2">
+            <button onclick="cambiarArea('Bar')" id="area-bar" class="px-5 py-2.5 rounded-xl font-bold transition-all text-xs bg-slate-800 text-slate-400 hover:bg-slate-750">
+              Bar 🍺
+            </button>
+            <button onclick="cambiarArea('Snack')" id="area-snack" class="px-5 py-2.5 rounded-xl font-bold transition-all text-xs bg-slate-800 text-slate-400 hover:bg-slate-750">
+              Snack 🍔
+            </button>
+            <button onclick="cambiarArea('Palapa')" id="area-palapa" class="px-5 py-2.5 rounded-xl font-bold transition-all text-xs bg-campestre-green text-white shadow-lg">
+              Palapa 🌴
+            </button>
+          </div>
+        </div>
+
+        <!-- Productos -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold" id="titulo-productos">Carta y Productos</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs" id="contenedor-productos"></div>
+        </div>
+      </div>
+
+      <!-- Carrito -->
+      <div class="space-y-6">
+        <div class="glass-card rounded-3xl border border-slate-800 flex flex-col min-h-[500px]">
+          <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+            <h4 class="font-bold text-sm uppercase tracking-wider text-slate-300">🛒 Pedido Actual</h4>
+            <button onclick="vaciarCarrito()" id="btn-vaciar-carrito" class="text-xs text-red-400 hover:underline hidden">Vaciar</button>
+          </div>
+
+          <div class="flex-1 p-5 overflow-y-auto space-y-4 max-h-[280px]" id="contenedor-carrito"></div>
+
+          <!-- Selección Cadi/Socio -->
+          <div id="pos-seccion-cadi" class="p-5 bg-slate-900/40 border-t border-slate-800 space-y-4 text-xs hidden">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Asignar Cadi de Ronda:</label>
+              <select
+                id="select-cadi"
+                onchange="seleccionarCadi(this.value)"
+                class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white outline-none focus:border-campestre-gold"
+              ></select>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Socios asociados:</span>
+                <button id="btn-buscador-manual" onclick="toggleBuscadorSocio()" class="text-[10px] text-campestre-gold hover:underline font-bold">+ Asociar Socio</button>
+              </div>
+
+              <!-- Buscador manual -->
+              <div id="buscador-socio-container" class="bg-slate-850 p-3 rounded-xl border border-slate-700 space-y-2 mb-3 hidden">
+                <input
+                  type="text"
+                  id="input-buscar-socio"
+                  placeholder="Escribe el nombre del socio..."
+                  oninput="filtrarSocioBuscador(this.value)"
+                  class="w-full px-2.5 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 outline-none"
+                />
+                <button
+                  onclick="abrirSimuladorQR()"
+                  class="w-full py-1.5 bg-campestre-gold/10 text-campestre-gold hover:bg-campestre-gold/20 text-[10px] font-bold rounded-lg border border-campestre-gold/25"
+                >
+                  📷 Simular Escaneo Código QR
+                </button>
+                <div id="buscador-sugerencias" class="max-h-24 overflow-y-auto bg-slate-900 border border-slate-750 rounded-lg hidden"></div>
+              </div>
+
+              <div id="lista-socios-activos" class="space-y-1.5"></div>
+            </div>
+          </div>
+
+          <!-- Totales y Cobro -->
+          <div id="seccion-totales-carrito" class="p-5 border-t border-slate-800 space-y-4 hidden">
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between text-sm font-extrabold text-white">
+                <span>Total:</span>
+                <span class="gold-gradient-text font-sans" id="total-general">$0.00</span>
+              </div>
+            </div>
+
+            <button
+              onclick="abrirModalCobro()"
+              class="w-full py-3 bg-campestre-green hover:bg-campestre-green/95 text-white font-bold rounded-xl btn-premium text-xs shadow-lg shadow-campestre-green/20"
+            >
+              Cerrar y Cobrar Cuenta (Split)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. HISTORIAL DEL TURNO ACTIVO -->
+    <div id="view-staff-historial" class="space-y-6 hidden">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-bold Outfit">Historial y Control de Caja del Turno</h3>
+        <button
+          onclick="abrirCierreTurnoModal()"
+          class="px-5 py-2.5 bg-red-500 hover:bg-red-650 text-white text-xs font-bold rounded-xl btn-premium shadow-lg shadow-red-500/10"
+        >
+          🔑 Cerrar Turno de Venta
+        </button>
+      </div>
+
+      <!-- Métricas del Turno -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="glass-card rounded-2xl border border-slate-800 p-5">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Fondo Inicial</span>
+          <h4 class="text-xl font-extrabold text-slate-200 mt-1 font-sans" id="turno-fondo-inicial-txt">$0.00 MXN</h4>
+        </div>
+        <div class="glass-card rounded-2xl border border-slate-800 p-5">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Ventas en Efectivo</span>
+          <h4 class="text-xl font-extrabold text-emerald-450 mt-1 font-sans" id="turno-efectivo-txt">$0.00 MXN</h4>
+        </div>
+        <div class="glass-card rounded-2xl border border-slate-800 p-5">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Total Proyectado Caja (Efectivo + Fondo)</span>
+          <h4 class="text-xl font-extrabold text-white mt-1 font-sans" id="turno-total-caja-txt">$0.00 MXN</h4>
+        </div>
+        <div class="glass-card rounded-2xl border border-slate-800 p-5">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Adeudos Generados (Cargos Socios)</span>
+          <h4 class="text-xl font-extrabold text-campestre-gold mt-1 font-sans" id="turno-adeudos-txt">$0.00 MXN</h4>
+        </div>
+      </div>
+
+      <!-- Listado de Ventas -->
+      <div class="glass-card rounded-3xl border border-slate-800 p-6 space-y-4">
+        <h4 class="font-bold text-sm uppercase tracking-wider text-slate-300">Ventas Registradas en este Turno</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left text-slate-350">
+            <thead class="bg-slate-900 border-b border-slate-800 text-[10px] font-bold uppercase tracking-wider">
+              <tr>
+                <th class="px-5 py-3 text-slate-450">Hora</th>
+                <th class="px-5 py-3 text-slate-450">Área</th>
+                <th class="px-5 py-3 text-slate-450">Items Vendidos</th>
+                <th class="px-5 py-3 text-slate-450">Distribución / Pago</th>
+                <th class="px-5 py-3 text-slate-450 text-right">Total Cuenta</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-ventas-turno" class="divide-y divide-slate-850">
+              <!-- Carga dinámica -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. PORTAL DEL SOCIO (Dashboard) -->
+    <div id="view-socio-portal" class="grid grid-cols-1 md:grid-cols-3 gap-6 hidden">
+      <!-- Membresía QR -->
+      <div class="glass-card rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center text-center">
+        <span class="text-[9px] text-campestre-gold font-bold uppercase tracking-widest bg-campestre-gold/10 px-3 py-1 rounded-full border border-campestre-gold/25 mb-4">
+          Membresía Digital
+        </span>
+        <h3 class="text-lg font-bold text-white font-sans" id="socio-sesion-nombre">Nombre Socio</h3>
+        <span class="text-xs text-slate-400 block mt-0.5" id="socio-sesion-codigo">SOCIO-XXXX</span>
+
+        <!-- Barcode / QR simulador -->
+        <div class="bg-white p-4 rounded-2xl my-6 border border-slate-700 w-44 h-44 flex flex-col items-center justify-center">
+          <span class="text-xs text-slate-900 font-mono font-bold select-all break-all overflow-hidden p-1 max-w-[140px] text-center border-b border-slate-300 mb-2" id="socio-sesion-qr-text">
+            token-xyz
+          </span>
+          <span class="text-[9px] text-slate-500 font-sans font-bold">CÓDIGO DE ESCANEO POS</span>
+        </div>
+
+        <p class="text-[10px] text-slate-400 max-w-xs mb-6">
+          Presenta esta clave o cópiala para ingresarla en el lector QR del vendedor en el POS.
+        </p>
+
+        <div class="w-full space-y-2">
+          <button onclick="regenerarSocioQR()" class="w-full py-2 bg-slate-800 hover:bg-slate-750 text-white font-bold rounded-lg text-xs">🔄 Regenerar QR Seguro</button>
+          <button onclick="copiarQRToken()" class="w-full py-2 bg-campestre-gold/10 hover:bg-campestre-gold/20 text-campestre-gold font-bold rounded-lg text-xs border border-campestre-gold/20">📋 Copiar Token QR</button>
+        </div>
+      </div>
+
+      <!-- Historial de consumos del socio -->
+      <div class="md:col-span-2 space-y-4">
+        <h3 class="text-lg font-bold">Mis Consumos y Gastos en el Club</h3>
+        <div class="space-y-4" id="contenedor-mis-gastos"></div>
+      </div>
+    </div>
+
+    <!-- 6. PANEL ADMINISTRATIVO (Superadmin) -->
+    <div id="view-admin" class="space-y-6 hidden">
+
+      <!-- SOLO ADMIN: Cajas Contables + Stock -->
+      <div id="admin-only-sections" class="space-y-6">
+        <!-- Panel de Cajas Contables Acumulativas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="glass-card rounded-2xl border border-slate-800 p-5 flex items-center justify-between relative overflow-hidden">
+            <div class="space-y-1">
+              <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">💵 Caja de Efectivo Global</span>
+              <h4 class="text-2xl font-extrabold text-emerald-450 font-sans" id="balance-caja-efectivo">$0.00 MXN</h4>
+              <span class="text-[9px] text-slate-500 block">Acumulado total histórico en efectivo</span>
+            </div>
+            <span class="text-3xl opacity-30 select-none">💵</span>
+          </div>
+          <div class="glass-card rounded-2xl border border-slate-800 p-5 flex items-center justify-between relative overflow-hidden">
+            <div class="space-y-1">
+              <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">💳 Terminal de Tarjetas</span>
+              <h4 class="text-2xl font-extrabold text-blue-400 font-sans" id="balance-caja-tarjetas">$0.00 MXN</h4>
+              <span class="text-[9px] text-slate-500 block">Acumulado total histórico por tarjetas</span>
+            </div>
+            <span class="text-3xl opacity-30 select-none">💳</span>
+          </div>
+          <div class="glass-card rounded-2xl border border-slate-800 p-5 flex items-center justify-between relative overflow-hidden">
+            <div class="space-y-1">
+              <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">👤 Cargos a Socios</span>
+              <h4 class="text-2xl font-extrabold text-campestre-gold font-sans" id="balance-caja-cargos">$0.00 MXN</h4>
+              <span class="text-[9px] text-slate-500 block">Cuentas por cobrar acumulativas de miembros</span>
+            </div>
+            <span class="text-3xl opacity-30 select-none">⛳</span>
+          </div>
+        </div>
+
+        <!-- Inventario Físico (SOLO ADMIN PUEDE MODIFICAR) -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold font-sans">📦 Inventarios Físicos por Área (Solo Superadmin)</h3>
+          <div class="glass-card rounded-2xl border border-slate-800 overflow-x-auto">
+            <table class="w-full text-xs text-left text-slate-350">
+              <thead class="bg-slate-900 border-b border-slate-800 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <tr>
+                  <th class="px-5 py-4 font-semibold text-slate-400">Producto</th>
+                  <th class="px-5 py-4 font-semibold text-slate-400 text-center">Bar</th>
+                  <th class="px-5 py-4 font-semibold text-slate-400 text-center">Snack</th>
+                  <th class="px-5 py-4 font-semibold text-slate-400 text-center">Palapa</th>
+                  <th class="px-5 py-4 font-semibold text-slate-400 text-center">Ajuste</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60" id="tabla-admin-inventario"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARTIDO: Gestión de Socios, Cadis y Rondas -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="glass-card rounded-2xl border border-slate-800 p-5 space-y-4">
+          <h4 class="text-sm font-bold uppercase tracking-wider text-slate-300">👤 Registrar Socio</h4>
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Código de Socio (Único):</label>
+              <input type="text" id="admin-socio-codigo" placeholder="E.g. SOCIO-104" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none" />
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Nombre Completo:</label>
+              <input type="text" id="admin-socio-nombre" placeholder="María Elena Ruíz" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none" />
+            </div>
+            <button onclick="crearSocioAdmin()" class="w-full py-2 bg-campestre-gold text-slate-950 font-bold rounded-lg mt-2">Dar de Alta Socio</button>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl border border-slate-800 p-5 space-y-4">
+          <h4 class="text-sm font-bold uppercase tracking-wider text-slate-300">⛳ Registrar Cadi</h4>
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Número de Cadi (Único):</label>
+              <input type="text" id="admin-cadi-numero" placeholder="E.g. CADI-050" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none" />
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Nombre Completo:</label>
+              <input type="text" id="admin-cadi-nombre" placeholder="José González" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none" />
+            </div>
+            <button onclick="crearCadiAdmin()" class="w-full py-2 bg-slate-800 hover:bg-slate-750 text-white font-bold rounded-lg mt-2 border border-slate-700">Dar de Alta Cadi</button>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl border border-slate-800 p-5 space-y-4">
+          <h4 class="text-sm font-bold uppercase tracking-wider text-slate-300">⛳ Asignar Cadi a Ronda</h4>
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Cadi Disponible:</label>
+              <select id="admin-select-cadi-ronda" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none"></select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Socios del grupo:</label>
+              <div class="max-h-24 overflow-y-auto bg-slate-950 p-2 border border-slate-800 rounded-lg space-y-1" id="admin-checkboxes-socios"></div>
+            </div>
+            <button onclick="iniciarRondaAdmin()" class="w-full py-2 bg-campestre-green text-white font-bold rounded-lg mt-2">Iniciar Ronda (Asignar)</button>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl border border-slate-800 p-5 space-y-4">
+          <h4 class="text-sm font-bold uppercase tracking-wider text-slate-300">⛳ Rondas Activas</h4>
+          <div class="space-y-2 text-xs" id="admin-cadis-en-ronda"></div>
+        </div>
+      </div>
+
+      <!-- Gestión de Adeudos de Socios -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold font-sans">💳 Cuentas y Adeudos de Socios</h3>
+
+        <div class="glass-card rounded-3xl border border-slate-800 p-6 space-y-4">
+          <h4 class="text-sm font-bold uppercase tracking-wider text-slate-300">📋 Adeudos Registrados</h4>
+          <div class="space-y-3" id="admin-lista-adeudos"></div>
+        </div>
+
+        <div class="glass-card rounded-2xl border border-slate-800 p-5 space-y-4">
+          <h4 class="text-sm font-bold uppercase tracking-wider text-slate-300">➕ Agregar Cargo Manual a Socio</h4>
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Socio:</label>
+              <select id="admin-adeudo-socio" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none"></select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Monto (MXN):</label>
+              <input type="number" id="admin-adeudo-monto" min="0" step="0.01" placeholder="0.00" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none" />
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Concepto:</label>
+              <input type="text" id="admin-adeudo-concepto" placeholder="Ej: Consumo extra, Renta cadi..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none" />
+            </div>
+            <button onclick="agregarCargoManual()" class="w-full py-2 bg-campestre-gold text-slate-950 font-bold rounded-lg mt-2">Agregar Cargo al Socio</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- --- MODAL DE COBRO (Split) --- -->
+  <div id="modal-cobro" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-5">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold font-sans">💳 Liquidación de Cuenta Compartida</h3>
+        <button onclick="cerrarModalCobro()" id="btn-cerrar-cobro" class="text-slate-400 hover:text-white font-bold">Cerrar</button>
+      </div>
+
+      <div id="cobro-exito-container" class="text-center py-6 space-y-2 hidden">
+        <span class="text-4xl block">✅</span>
+        <h4 class="text-lg font-bold text-white font-sans">¡Venta Registrada!</h4>
+        <p class="text-[10px] text-slate-400">Los stocks se han descontado y el dinero se ha acumulado en el turno actual.</p>
+      </div>
+
+      <div id="cobro-detalle-container" class="space-y-4">
+        <div class="p-3.5 bg-slate-950 rounded-xl flex justify-between items-center text-xs">
+          <div>
+            <span class="text-slate-400 block text-[10px] uppercase">Cadi Asistente:</span>
+            <span class="text-white font-bold" id="modal-cadi-nombre">CADI-XXX</span>
+          </div>
+          <div class="text-right">
+            <span class="text-slate-400 block text-[10px] uppercase">Total Cuenta:</span>
+            <span class="text-campestre-gold font-extrabold text-sm" id="modal-total-cuenta">$0.00</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Desglose del Split Proporcional:</span>
+          <div class="space-y-2 max-h-40 overflow-y-auto" id="modal-split-desglose"></div>
+        </div>
+
+        <button
+          onclick="confirmarPago()"
+          class="w-full py-3 bg-campestre-gold hover:bg-campestre-gold/90 text-slate-950 font-bold rounded-xl btn-premium text-xs mt-4"
+        >
+          Confirmar Cobro y Descontar Stock
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --- MODAL CIERRE DE TURNO (ARQUEO DE CAJA) --- -->
+  <div id="modal-cierre-turno" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-5">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center space-x-1.5 font-sans">
+          <span>🚨</span>
+          <span>Resumen de Cierre de Caja</span>
+        </h3>
+        <button onclick="cerrarCierreTurnoModal()" class="text-slate-450 hover:text-white font-bold text-sm">Cerrar</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <p class="text-slate-400">Al confirmar el cierre de turno, se totalizarán las cajas de la jornada y se registrarán los adeudos de los socios correspondientes.</p>
+        
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850 space-y-2">
+          <div class="flex justify-between text-slate-400">
+            <span>Fondo Inicial:</span>
+            <span class="text-white font-semibold" id="cierre-fondo-inicial">$0.00</span>
+          </div>
+          <div class="flex justify-between text-slate-400">
+            <span>Ventas Efectivo Recibido:</span>
+            <span class="text-white font-semibold" id="cierre-ventas-efectivo">$0.00</span>
+          </div>
+          <div class="flex justify-between border-t border-slate-800 pt-2 text-sm text-slate-300 font-bold font-sans">
+            <span>Total Efectivo en Caja:</span>
+            <span class="text-emerald-400" id="cierre-total-caja">$0.00</span>
+          </div>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850 space-y-2">
+          <div class="flex justify-between text-slate-400">
+            <span>Total en Tarjetas (Terminales):</span>
+            <span class="text-blue-400 font-semibold" id="cierre-total-tarjetas">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Adeudos Pendientes -->
+        <div class="space-y-2">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Adeudos Pendientes de Cobro (Cargos a Socios):</span>
+          <div class="bg-slate-950 p-3 rounded-2xl border border-slate-850 max-h-32 overflow-y-auto space-y-1.5" id="cierre-lista-adeudos">
+            <!-- Dinámico -->
+          </div>
+        </div>
+
+        <button
+          onclick="confirmarCerrarTurno()"
+          class="w-full py-3 bg-red-500 hover:bg-red-650 text-white font-bold rounded-xl btn-premium text-xs shadow-lg shadow-red-500/15"
+        >
+          Confirmar y Cerrar Caja de Turno
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --- OTROS MODALES --- -->
+  <!-- Modal Ajuste Stock -->
+  <div id="modal-ajuste" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+    <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
+      <h4 class="text-sm font-bold text-white flex items-center space-x-2 border-b border-slate-800 pb-3">
+        <span>📦</span>
+        <span>Ajustar Almacenamiento</span>
+      </h4>
+      <p class="text-xs text-slate-400">Ajuste de: <b class="text-white" id="ajuste-producto-nombre">Producto</b>.</p>
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block text-[10px] text-slate-400 mb-1">Área Física:</label>
+          <select id="ajuste-select-area" onchange="cambiarAreaAjuste(this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none">
+            <option value="Bar">Bar 🍺</option>
+            <option value="Snack">Snack 🍔</option>
+            <option value="Palapa">Palapa 🌴</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] text-slate-400 mb-1">Nuevo Stock Físico:</label>
+          <input type="number" id="ajuste-stock-input" min="0" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none" />
+        </div>
+        <div class="flex space-x-2 pt-2">
+          <button onclick="cerrarAjusteStock()" class="flex-1 py-2 bg-slate-850 text-slate-400 font-bold rounded-lg text-xs">Cancelar</button>
+          <button onclick="confirmarAjusteStock()" class="flex-1 py-2 bg-campestre-gold text-slate-950 font-bold rounded-lg text-xs">Confirmar Stock</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal QR Lector -->
+  <div id="modal-qr" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+    <div class="w-full max-w-xs bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-4">
+      <h4 class="text-xs font-bold text-white flex items-center space-x-1"><span>📷</span><span>Lector QR</span></h4>
+      <p class="text-[10px] text-slate-400">Pega el token del socio para simular el escaneo.</p>
+      <div id="qr-error-msg" class="bg-red-500/10 text-red-400 text-[10px] p-2 rounded border border-red-500/20 text-center hidden"></div>
+      <input type="text" id="input-qr-token" placeholder="Pegar token del QR..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-slate-500 outline-none" />
+      <div class="flex space-x-2 pt-1 text-xs">
+        <button onclick="cerrarSimuladorQR()" class="flex-1 py-2 bg-slate-850 text-slate-400 font-bold rounded-lg text-xs">Cancelar</button>
+        <button onclick="procesarEscaneoQR()" class="flex-1 py-2 bg-campestre-gold text-slate-950 font-bold rounded-lg text-xs">Escanear</button>
+      </div>
+      <div class="text-[8px] text-slate-500 border-t border-slate-850 pt-2 text-center">
+        <b>Token Juan:</b> <span class="select-all block font-mono bg-slate-950 p-1 mt-1 text-slate-400 rounded">uuid-juan-perez-101-token</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-900 bg-slate-950 py-4 text-center text-[10px] text-slate-500 font-sans mt-auto">
+    <div>Campestre System • Guardado local activo via LocalStorage • © 2026 Todos los derechos reservados</div>
+  </footer>
+
+  <!-- --- JAVASCRIPT DE LOGICA DE NEGOCIO --- -->
+  <script>
+    // --- DATOS SEMILLA INICIALES ---
+    const PRODUCTOS_INICIALES = [
+      { id: 1, nombre: 'Cerveza Corona Extra 355ml', precio: 45.00, categoria: 'Bebidas Alcoholicas', stocks: { Bar: 150, Snack: 60, Palapa: 90 }, min: 10 },
+      { id: 2, nombre: 'Refresco Coca Cola 355ml', precio: 25.00, categoria: 'Refrescos', stocks: { Bar: 80, Snack: 90, Palapa: 110 }, min: 10 },
+      { id: 3, nombre: 'Agua Embotellada 600ml', precio: 18.00, categoria: 'Bebidas', stocks: { Bar: 50, Snack: 120, Palapa: 80 }, min: 15 },
+      { id: 4, nombre: 'Hamburguesa Campestre con Papas', precio: 125.00, categoria: 'Comida', stocks: { Bar: 20, Snack: 15, Palapa: 45 }, min: 5 },
+      { id: 5, nombre: 'Tacos de Arrachera (Orden de 3)', precio: 110.00, categoria: 'Comida', stocks: { Bar: 15, Snack: 30, Palapa: 40 }, min: 5 },
+      { id: 6, nombre: 'Papas a la Francesa Porción', precio: 50.00, categoria: 'Snacks', stocks: { Bar: 40, Snack: 25, Palapa: 60 }, min: 10 },
+    ];
+
+    const CADIS_INICIALES = [
+      { id: 1, numero_cadi: 'CADI-001', nombre: 'Carlos Mendoza', estado: 'DISPONIBLE', clientes: [] },
+      { id: 2, numero_cadi: 'CADI-002', nombre: 'José Luis Torres', estado: 'DISPONIBLE', clientes: [] },
+      { id: 3, numero_cadi: 'CADI-045', nombre: 'Martín Hernández', estado: 'DISPONIBLE', clientes: [] },
+    ];
+
+    const SOCIOS_INICIALES = [
+      { id: 1, codigo_socio: 'SOCIO-101', nombre: 'Juan Pérez García', qr_token: 'uuid-juan-perez-101-token', activo: true },
+      { id: 2, codigo_socio: 'SOCIO-102', nombre: 'Luis Gómez Cantú', qr_token: 'uuid-luis-gomez-102-token', activo: true },
+      { id: 3, codigo_socio: 'SOCIO-103', nombre: 'Ana Ruiz Flores', qr_token: 'uuid-ana-ruiz-103-token', activo: true },
+    ];
+
+    // --- ESTADO GLOBAL ---
+    const state = {
+      productos: JSON.parse(localStorage.getItem('demo_productos')) || PRODUCTOS_INICIALES,
+      cadis: JSON.parse(localStorage.getItem('demo_cadis')) || CADIS_INICIALES,
+      socios: JSON.parse(localStorage.getItem('demo_socios')) || SOCIOS_INICIALES,
+      historialConsumos: JSON.parse(localStorage.getItem('demo_historial')) || [],
+
+      // Caja general histórica
+      caja_efectivo: parseFloat(localStorage.getItem('demo_caja_efectivo')) || 0,
+      caja_tarjetas: parseFloat(localStorage.getItem('demo_caja_tarjetas')) || 0,
+      caja_cargos: parseFloat(localStorage.getItem('demo_caja_cargos')) || 0,
+
+      // --- ADEUDOS DE SOCIOS ---
+      adeudos: JSON.parse(localStorage.getItem('demo_adeudos')) || [],
+
+      // --- GESTIÓN DE TURNOS ---
+      turnoActivo: JSON.parse(localStorage.getItem('demo_turno_activo')) || false,
+      turnoFondoInicial: parseFloat(localStorage.getItem('demo_turno_fondo')) || 0,
+      turnoVentas: JSON.parse(localStorage.getItem('demo_turno_ventas')) || [],
+      turnosCerrados: JSON.parse(localStorage.getItem('demo_turnos_cerrados')) || [],
+
+      // Sesiones
+      socioSesion: JSON.parse(localStorage.getItem('demo_socio_sesion')) || null,
+      staffSesion: JSON.parse(localStorage.getItem('demo_staff_sesion')) || null,
+
+      // UI
+      tabLoginActivo: 'socio',
+      activeView: 'LOCK', // 'LOCK', 'POS', 'SOCIO', 'ADMIN', 'HISTORIAL'
+      areaSeleccionada: 'Palapa',
+      cadiSeleccionado: '',
+      carrito: [],
+      sociosManuales: [],
+      mostrarBuscador: false,
+      prodAjuste: null,
+      areaAjuste: 'Palapa',
+      splitCalculado: null,
+      metodosPago: {}
+    };
+
+    function guardarEnStorage() {
+      localStorage.setItem('demo_productos', JSON.stringify(state.productos));
+      localStorage.setItem('demo_cadis', JSON.stringify(state.cadis));
+      localStorage.setItem('demo_socios', JSON.stringify(state.socios));
+      localStorage.setItem('demo_historial', JSON.stringify(state.historialConsumos));
+      localStorage.setItem('demo_socio_sesion', JSON.stringify(state.socioSesion));
+      localStorage.setItem('demo_staff_sesion', JSON.stringify(state.staffSesion));
+      
+      localStorage.setItem('demo_caja_efectivo', state.caja_efectivo.toString());
+      localStorage.setItem('demo_caja_tarjetas', state.caja_tarjetas.toString());
+      localStorage.setItem('demo_caja_cargos', state.caja_cargos.toString());
+      localStorage.setItem('demo_adeudos', JSON.stringify(state.adeudos));
+
+      // Guardar turnos
+      localStorage.setItem('demo_turno_activo', JSON.stringify(state.turnoActivo));
+      localStorage.setItem('demo_turno_fondo', state.turnoFondoInicial.toString());
+      localStorage.setItem('demo_turno_ventas', JSON.stringify(state.turnoVentas));
+      localStorage.setItem('demo_turnos_cerrados', JSON.stringify(state.turnosCerrados));
+    }
+
+    // --- ENRUTAMIENTO CONTROLES ---
+    function aplicarAccesoRuta() {
+      // Ocultar todo
+      document.getElementById('view-lock-screen').classList.add('hidden');
+      document.getElementById('view-turno-cerrado').classList.add('hidden');
+      document.getElementById('view-pos').classList.add('hidden');
+      document.getElementById('view-staff-historial').classList.add('hidden');
+      document.getElementById('view-socio-portal').classList.add('hidden');
+      document.getElementById('view-admin').classList.add('hidden');
+      
+      document.getElementById('staff-switcher').classList.add('hidden');
+      document.getElementById('user-session-info').classList.add('hidden');
+      document.getElementById('nav-admin-view').classList.add('hidden');
+
+      if (!state.staffSesion && !state.socioSesion) {
+        state.activeView = 'LOCK';
+        document.getElementById('view-lock-screen').classList.remove('hidden');
+        document.getElementById('header-subtitle').innerText = "Demo Virtual / Iniciar Sesión";
+        return;
+      }
+
+      document.getElementById('user-session-info').classList.remove('hidden');
+
+      // 1. Vista Socio
+      if (state.socioSesion) {
+        state.activeView = 'SOCIO';
+        document.getElementById('view-socio-portal').classList.remove('hidden');
+        document.getElementById('header-subtitle').innerText = "Portal del Socio";
+        document.getElementById('txt-rol-activo').innerText = `Socio: ${state.socioSesion.codigo_socio}`;
+        renderSocioPortal();
+        return;
+      }
+
+      // 2. Vista Staff (Vendedor / Admin)
+      if (state.staffSesion) {
+        document.getElementById('staff-switcher').classList.remove('hidden');
+        
+        // Si no hay turno activo, bloquear al personal a la pantalla de Apertura
+        if (!state.turnoActivo) {
+          state.activeView = 'TURNO_CERRADO';
+          document.getElementById('view-turno-cerrado').classList.remove('hidden');
+          document.getElementById('staff-switcher').classList.add('hidden');
+          document.getElementById('header-subtitle').innerText = "Apertura de Caja Obligatoria";
+          document.getElementById('txt-rol-activo').innerText = state.staffSesion.role === 'ADMIN' ? 'Admin (Caja Cerrada)' : 'Vendedor (Caja Cerrada)';
+          return;
+        }
+
+        const isAdmin = state.staffSesion.role === 'ADMIN';
+        document.getElementById('txt-rol-activo').innerText = isAdmin ? 'Superadmin' : 'Vendedor';
+
+        // Mostrar botón Panel Control solo para Admin
+        if (isAdmin) {
+          document.getElementById('nav-admin-view').classList.remove('hidden');
+        }
+
+        // --- Vista GESTIÓN (Adeudos, Cadis, Socios) — Ambos roles ---
+        if (state.activeView === 'GESTION') {
+          document.getElementById('view-admin').classList.remove('hidden');
+          document.getElementById('admin-only-sections').classList.add('hidden'); // Ocultar stock/cajas
+          document.getElementById('header-subtitle').innerText = "Gestión: Adeudos, Cadis y Socios";
+          actualizarNavegacionStaff('nav-staff-gestion');
+          renderAdminPanel();
+          return;
+        }
+
+        // --- Vista POS ---
+        if (state.activeView === 'POS' || (!isAdmin && state.activeView !== 'HISTORIAL' && state.activeView !== 'GESTION')) {
+          state.activeView = 'POS';
+          document.getElementById('view-pos').classList.remove('hidden');
+          document.getElementById('header-subtitle').innerText = isAdmin ? 'Campestre System - Modo Admin' : 'Campestre System';
+          actualizarNavegacionStaff('nav-staff-pos');
+          renderPOS();
+          return;
+        }
+
+        // --- Vista HISTORIAL ---
+        if (state.activeView === 'HISTORIAL') {
+          document.getElementById('view-staff-historial').classList.remove('hidden');
+          document.getElementById('header-subtitle').innerText = "Historial de Caja del Turno";
+          actualizarNavegacionStaff('nav-staff-historial');
+          renderHistorialTurno();
+          return;
+        }
+
+        // --- Vista ADMIN (Solo superadmin: Cajas + Stock) ---
+        if (isAdmin) {
+          state.activeView = 'ADMIN';
+          document.getElementById('view-admin').classList.remove('hidden');
+          document.getElementById('admin-only-sections').classList.remove('hidden'); // Mostrar stock/cajas
+          document.getElementById('header-subtitle').innerText = "Panel de Control Superadmin";
+          actualizarNavegacionStaff('nav-admin-view');
+          renderAdminPanel();
+          return;
+        }
+      }
+    }
+
+    function cambiarVistaStaff(vista) {
+      state.activeView = vista;
+      aplicarAccesoRuta();
+    }
+
+    function actualizarNavegacionStaff(idActivo) {
+      ['nav-admin-view', 'nav-staff-pos', 'nav-staff-historial', 'nav-staff-gestion'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200";
+      });
+      const act = document.getElementById(idActivo);
+      if (!act) return;
+      if (idActivo === 'nav-staff-pos') {
+        act.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all bg-campestre-green text-white shadow";
+      } else if (idActivo === 'nav-staff-historial') {
+        act.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold";
+      } else if (idActivo === 'nav-staff-gestion') {
+        act.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold";
+      } else {
+        act.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all bg-slate-800 text-white shadow";
+      }
+    }
+
+    // --- ACCESOS (LOGINS) ---
+    function cambiarTabLogin(tab) {
+      state.tabLoginActivo = tab;
+      ['socio', 'vendedor', 'admin'].forEach(t => {
+        const btn = document.getElementById(`tab-login-${t}`);
+        btn.className = "flex-1 py-1.5 text-center text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200";
+      });
+
+      ['socio', 'vendedor', 'admin'].forEach(f => {
+        document.getElementById(`form-login-${f}`).classList.add('hidden');
+      });
+
+      const selectedBtn = document.getElementById(`tab-login-${tab}`);
+      if (tab === 'socio') {
+        selectedBtn.className = "flex-1 py-1.5 text-center text-xs font-semibold rounded-lg bg-campestre-gold text-slate-950 shadow-sm";
+      } else if (tab === 'vendedor') {
+        selectedBtn.className = "flex-1 py-1.5 text-center text-xs font-semibold rounded-lg bg-campestre-green text-white shadow-sm";
+      } else {
+        selectedBtn.className = "flex-1 py-1.5 text-center text-xs font-semibold rounded-lg bg-slate-800 text-white shadow-sm";
+      }
+
+      document.getElementById(`form-login-${tab}`).classList.remove('hidden');
+      document.getElementById('login-error-msg').classList.add('hidden');
+    }
+
+    function procesarLoginSocio() {
+      const nombre = document.getElementById('input-login-socio-nombre').value.trim();
+      const err = document.getElementById('login-error-msg');
+      err.classList.add('hidden');
+
+      if (!nombre) {
+        err.innerText = "Por favor ingresa tu nombre.";
+        err.classList.remove('hidden');
+        return;
+      }
+
+      const socio = state.socios.find(s => s.nombre.toLowerCase() === nombre.toLowerCase());
+      if (socio) {
+        state.socioSesion = socio;
+        state.staffSesion = null;
+        guardarEnStorage();
+        aplicarAccesoRuta();
+      } else {
+        err.innerText = "Socio no encontrado. Intenta con: Juan Pérez García";
+        err.classList.remove('hidden');
+      }
+    }
+
+    function procesarLoginVendedor() {
+      const user = document.getElementById('input-login-vendedor-user').value.trim();
+      const pass = document.getElementById('input-login-vendedor-pass').value.trim();
+      const err = document.getElementById('login-error-msg');
+      err.classList.add('hidden');
+
+      if (user === 'vendedor' && pass === 'vendedor123') {
+        state.staffSesion = { username: 'vendedor', role: 'VENDEDOR' };
+        state.socioSesion = null;
+        guardarEnStorage();
+        aplicarAccesoRuta();
+      } else {
+        err.innerText = "Usuario o contraseña de Vendedor incorrecta.";
+        err.classList.remove('hidden');
+      }
+    }
+
+    function procesarLoginAdmin() {
+      const user = document.getElementById('input-login-admin-user').value.trim();
+      const pass = document.getElementById('input-login-admin-pass').value.trim();
+      const err = document.getElementById('login-error-msg');
+      err.classList.add('hidden');
+
+      if (user === 'admin' && pass === 'admin123') {
+        state.staffSesion = { username: 'admin', role: 'ADMIN' };
+        state.socioSesion = null;
+        state.activeView = 'ADMIN';
+        guardarEnStorage();
+        aplicarAccesoRuta();
+      } else {
+        err.innerText = "Usuario o contraseña de Administrador incorrecta.";
+        err.classList.remove('hidden');
+      }
+    }
+
+    function cerrarSesion() {
+      state.staffSesion = null;
+      state.socioSesion = null;
+      state.carrito = [];
+      state.cadiSeleccionado = '';
+      state.sociosManuales = [];
+      guardarEnStorage();
+      aplicarAccesoRuta();
+    }
+
+    // --- APERTURA Y CIERRE DE TURNO ---
+    function abrirTurnoActivo() {
+      const fondo = parseFloat(document.getElementById('input-fondo-inicial').value);
+      if (isNaN(fondo) || fondo < 0) {
+        alert('Ingresa un fondo inicial válido.');
+        return;
+      }
+
+      state.turnoActivo = true;
+      state.turnoFondoInicial = fondo;
+      state.turnoVentas = [];
+      
+      guardarEnStorage();
+      
+      // Ir a la vista POS de venta al abrir
+      state.activeView = 'POS';
+      aplicarAccesoRuta();
+      alert('Caja abierta. Turno activo iniciado con fondo de ' + formatMonto(fondo));
+    }
+
+    function renderHistorialTurno() {
+      // 1. Calcular totales del turno activo
+      let efectivoVendio = 0;
+      let tarjetaVendio = 0;
+      let cargosVendio = 0;
+
+      state.turnoVentas.forEach(v => {
+        v.pagos.forEach(p => {
+          if (p.metodo === 'EFECTIVO') efectivoVendio += p.monto;
+          else if (p.metodo === 'TARJETA') tarjetaVendio += p.monto;
+          else if (p.metodo === 'CARGO_SOCIO') cargosVendio += p.monto;
+        });
+      });
+
+      const totalCaja = state.turnoFondoInicial + efectivoVendio;
+
+      document.getElementById('turno-fondo-inicial-txt').innerText = formatMonto(state.turnoFondoInicial);
+      document.getElementById('turno-efectivo-txt').innerText = formatMonto(efectivoVendio);
+      document.getElementById('turno-total-caja-txt').innerText = formatMonto(totalCaja);
+      document.getElementById('turno-adeudos-txt').innerText = formatMonto(cargosVendio);
+
+      // 2. Cargar tabla de ventas
+      const tbody = document.getElementById('tabla-ventas-turno');
+      tbody.innerHTML = '';
+
+      if (state.turnoVentas.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-5 py-8 text-center text-slate-500 italic">No hay ventas registradas en este turno.</td></tr>`;
+        return;
+      }
+
+      state.turnoVentas.forEach(v => {
+        const row = document.createElement('tr');
+        row.className = "hover:bg-slate-850/30 transition-colors";
+        
+        let itemsList = v.items.join(', ');
+        
+        let desglosePagos = '';
+        v.pagos.forEach(p => {
+          desglosePagos += `<div class="text-[10px]"><span class="text-white font-bold">${p.nombre}</span>: ${formatMonto(p.monto)} (${p.metodo})</div>`;
+        });
+
+        row.innerHTML = `
+          <td class="px-5 py-3 text-slate-400 font-mono">${new Date(v.fecha).toLocaleTimeString()}</td>
+          <td class="px-5 py-3 font-semibold text-slate-200">${v.area}</td>
+          <td class="px-5 py-3 text-slate-300 max-w-xs truncate" title="${itemsList}">${itemsList}</td>
+          <td class="px-5 py-3 space-y-0.5">${desglosePagos}</td>
+          <td class="px-5 py-3 text-right font-bold text-white font-sans">${formatMonto(v.total)}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function abrirCierreTurnoModal() {
+      // Calcular balances del turno
+      let efectivo = 0;
+      let tarjeta = 0;
+      let cargos = 0;
+      
+      const deudores = {};
+
+      state.turnoVentas.forEach(v => {
+        v.pagos.forEach(p => {
+          if (p.metodo === 'EFECTIVO') efectivo += p.monto;
+          else if (p.metodo === 'TARJETA') tarjeta += p.monto;
+          else if (p.metodo === 'CARGO_SOCIO') {
+            cargos += p.monto;
+            // Registrar adeudo de socio
+            if (!deudores[p.nombre]) deudores[p.nombre] = 0;
+            deudores[p.nombre] += p.monto;
+          }
+        });
+      });
+
+      document.getElementById('cierre-fondo-inicial').innerText = formatMonto(state.turnoFondoInicial);
+      document.getElementById('cierre-ventas-efectivo').innerText = formatMonto(efectivo);
+      document.getElementById('cierre-total-caja').innerText = formatMonto(state.turnoFondoInicial + efectivo);
+      document.getElementById('cierre-total-tarjetas').innerText = formatMonto(tarjeta);
+
+      const deudoresContainer = document.getElementById('cierre-lista-adeudos');
+      deudoresContainer.innerHTML = '';
+
+      const deudoresKeys = Object.keys(deudores);
+      if (deudoresKeys.length === 0) {
+        deudoresContainer.innerHTML = `<p class="text-[10px] text-slate-500 italic text-center py-2">Sin cuentas por cobrar generadas.</p>`;
+      } else {
+        deudoresKeys.forEach(name => {
+          const row = document.createElement('div');
+          row.className = "flex justify-between items-center text-xs py-1 border-b border-slate-900 last:border-0";
+          row.innerHTML = `<span class="text-slate-350">👤 ${name}</span><span class="text-campestre-gold font-bold font-sans">${formatMonto(deudores[name])}</span>`;
+          deudoresContainer.appendChild(row);
+        });
+      }
+
+      document.getElementById('modal-cierre-turno').classList.remove('hidden');
+    }
+
+    function cerrarCierreTurnoModal() {
+      document.getElementById('modal-cierre-turno').classList.add('hidden');
+    }
+
+    function confirmarCerrarTurno() {
+      let efectivo = 0;
+      let tarjeta = 0;
+      let cargos = 0;
+      
+      state.turnoVentas.forEach(v => {
+        v.pagos.forEach(p => {
+          if (p.metodo === 'EFECTIVO') efectivo += p.monto;
+          else if (p.metodo === 'TARJETA') tarjeta += p.monto;
+          else if (p.metodo === 'CARGO_SOCIO') cargos += p.monto;
+        });
+      });
+
+      // Archivar el turno cerrado
+      const logTurno = {
+        id: Date.now(),
+        fondoInicial: state.turnoFondoInicial,
+        cajaEfectivoVendido: efectivo,
+        cajaEfectivoTotal: state.turnoFondoInicial + efectivo,
+        cajaTarjeta: tarjeta,
+        cajaCargosSocios: cargos,
+        ventas: state.turnoVentas,
+        abiertoAt: new Date().toISOString() // Simulación simplificada
+      };
+
+      state.turnosCerrados.push(logTurno);
+
+      // Sumar al total histórico global de la administración
+      state.caja_efectivo += efectivo;
+      state.caja_tarjetas += tarjeta;
+      state.caja_cargos += cargos;
+
+      // Resetear estado del turno activo
+      state.turnoActivo = false;
+      state.turnoFondoInicial = 0;
+      state.turnoVentas = [];
+      state.carrito = [];
+      state.cadiSeleccionado = '';
+      state.sociosManuales = [];
+
+      guardarEnStorage();
+      cerrarCierreTurnoModal();
+      aplicarAccesoRuta();
+      
+      alert('Cierre de caja guardado con éxito. Turno finalizado.');
+    }
+
+    // --- MÉTODOS DEL POS ---
+    function cambiarArea(area) {
+      state.areaSeleccionada = area;
+      state.carrito = [];
+      
+      ['Bar', 'Snack', 'Palapa'].forEach(a => {
+        const btn = document.getElementById(`area-${a.toLowerCase()}`);
+        if (a === area) {
+          btn.className = "px-5 py-2.5 rounded-xl font-bold transition-all text-xs bg-campestre-green text-white shadow-lg";
+        } else {
+          btn.className = "px-5 py-2.5 rounded-xl font-bold transition-all text-xs bg-slate-800 text-slate-400 hover:bg-slate-750";
+        }
+      });
+
+      document.getElementById('titulo-productos').innerText = `Carta y Productos del área de ${area}`;
+      renderPOS();
+    }
+
+    function renderPOS() {
+      const container = document.getElementById('contenedor-productos');
+      container.innerHTML = '';
+      
+      state.productos.forEach(prod => {
+        const stockActual = prod.stocks[state.areaSeleccionada];
+        const sinStock = stockActual <= 0;
+        
+        const card = document.createElement('button');
+        card.disabled = sinStock;
+        card.onclick = () => agregarAlCarrito(prod.id);
+        card.className = `glass-card rounded-2xl p-4 text-left border flex flex-col justify-between transition-all duration-300 relative group overflow-hidden ${
+          sinStock 
+            ? 'border-slate-900 opacity-40 cursor-not-allowed'
+            : 'border-slate-800 hover:border-campestre-green/50 active:scale-[0.98]'
+        }`;
+
+        card.innerHTML = `
+          <span class="text-[9px] text-campestre-gold font-bold uppercase bg-campestre-gold/10 px-2 py-0.5 rounded w-fit mb-3">
+            ${prod.categoria}
+          </span>
+          <div>
+            <h4 class="font-bold text-sm text-white line-clamp-2 leading-tight group-hover:text-campestre-gold transition-colors">${prod.nombre}</h4>
+            <p class="text-[10px] text-slate-400 mt-1">Stock local: <b class="${stockActual < prod.min ? 'text-red-400' : 'text-slate-350'}">${stockActual}</b> pz</p>
+          </div>
+          <div class="flex items-center justify-between mt-4 pt-2 border-t border-slate-850 w-full">
+            <span class="text-base font-extrabold text-white font-sans">${formatMonto(prod.precio)}</span>
+            <span class="p-1 rounded-lg bg-campestre-green/10 text-campestre-green group-hover:bg-campestre-green group-hover:text-white transition-all text-[10px]">
+              ➕
+            </span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      renderCarrito();
+      
+      const selectCadi = document.getElementById('select-cadi');
+      selectCadi.innerHTML = '<option value="">-- Sin Cadi Asignado --</option>';
+      state.cadis.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.id;
+        option.selected = state.cadiSeleccionado == c.id;
+        option.innerText = `${c.numero_cadi} - ${c.nombre} (${c.clientes.length} socios)`;
+        selectCadi.appendChild(option);
+      });
+    }
+
+    function renderCarrito() {
+      const container = document.getElementById('contenedor-carrito');
+      container.innerHTML = '';
+
+      if (state.carrito.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-16 text-slate-500 text-xs">
+            <p>Carrito vacío</p>
+            <p class="text-[10px] mt-1">Agrega consumos para comenzar</p>
+          </div>
+        `;
+        document.getElementById('btn-vaciar-carrito').classList.add('hidden');
+        document.getElementById('pos-seccion-cadi').classList.add('hidden');
+        document.getElementById('seccion-totales-carrito').classList.add('hidden');
+        return;
+      }
+
+      document.getElementById('btn-vaciar-carrito').classList.remove('hidden');
+      document.getElementById('pos-seccion-cadi').classList.remove('hidden');
+      document.getElementById('seccion-totales-carrito').classList.remove('hidden');
+
+      state.carrito.forEach(item => {
+        const itemRow = document.createElement('div');
+        itemRow.className = "flex justify-between items-center py-2 border-b border-slate-850 last:border-0 text-xs";
+        itemRow.innerHTML = `
+          <div class="flex-1 pr-2">
+            <h5 class="font-bold text-white leading-tight">${item.nombre}</h5>
+            <span class="text-campestre-gold font-medium block mt-0.5">${formatMonto(item.precio)} c/u</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="modificarCantidad(${item.id}, -1)" class="p-1 rounded bg-slate-850 text-slate-200">➖</button>
+            <span class="font-bold text-white w-6 text-center">${item.cantidad}</span>
+            <button onclick="modificarCantidad(${item.id}, 1)" class="p-1 rounded bg-slate-850 text-slate-200">➕</button>
+            <button onclick="quitarDelCarrito(${item.id})" class="text-slate-500 hover:text-red-400 ml-2">🗑️</button>
+          </div>
+        `;
+        container.appendChild(itemRow);
+      });
+
+      const totalCarrito = state.carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+
+      document.getElementById('total-general').innerText = formatMonto(totalCarrito);
+
+      renderSociosMesa();
+    }
+
+    function renderSociosMesa() {
+      const cadiActual = state.cadis.find(c => c.id == state.cadiSeleccionado);
+      const sociosActivos = cadiActual ? cadiActual.clientes : state.sociosManuales;
+      
+      const container = document.getElementById('lista-socios-activos');
+      container.innerHTML = '';
+
+      if (sociosActivos.length === 0) {
+        container.innerHTML = `<p class="text-[10px] text-slate-500 italic">Cuenta general (sin socio asociado)</p>`;
+        return;
+      }
+
+      sociosActivos.forEach(socio => {
+        const item = document.createElement('div');
+        item.className = "flex justify-between items-center bg-slate-850 border border-slate-800 px-3 py-1.5 rounded-xl text-xs";
+        
+        let removeButton = '';
+        if (!cadiActual) {
+          removeButton = `<button onclick="removerSocioManual(${socio.id})" class="text-red-400 font-bold hover:text-red-300">x</button>`;
+        }
+
+        item.innerHTML = `
+          <span class="text-white font-medium truncate max-w-[150px]">👤 ${socio.nombre}</span>
+          <div class="flex items-center space-x-2">
+            <span class="text-[9px] bg-slate-800 px-2 py-0.5 rounded text-slate-350">${socio.codigo_socio}</span>
+            ${removeButton}
+          </div>
+        `;
+        container.appendChild(item);
+      });
+
+      if (cadiActual) {
+        const txt = document.createElement('p');
+        txt.className = "text-[9px] text-emerald-400 font-semibold mt-1";
+        txt.innerText = `🟢 Split automático activo por Cadi (${sociosActivos.length} socios).`;
+        container.appendChild(txt);
+      }
+    }
+
+    function agregarAlCarrito(id) {
+      const prod = state.productos.find(p => p.id === id);
+      const stockDisp = prod.stocks[state.areaSeleccionada];
+      
+      const existente = state.carrito.find(c => c.id === id);
+      if (existente) {
+        if (existente.cantidad >= stockDisp) {
+          alert(`No puedes agregar más. Stock máximo alcanzado.`);
+          return;
+        }
+        existente.cantidad += 1;
+      } else {
+        if (stockDisp <= 0) {
+          alert(`No hay stock disponible.`);
+          return;
+        }
+        state.carrito.push({ ...prod, cantidad: 1 });
+      }
+      renderPOS();
+    }
+
+    function modificarCantidad(id, delta) {
+      const prod = state.productos.find(p => p.id === id);
+      const stockDisp = prod.stocks[state.areaSeleccionada];
+      const existente = state.carrito.find(c => c.id === id);
+
+      if (existente) {
+        const nuevaCant = existente.cantidad + delta;
+        if (nuevaCant > stockDisp) {
+          alert(`Stock insuficiente.`);
+          return;
+        }
+        if (nuevaCant <= 0) {
+          quitarDelCarrito(id);
+        } else {
+          existente.cantidad = nuevaCant;
+          renderPOS();
+        }
+      }
+    }
+
+    function quitarDelCarrito(id) {
+      state.carrito = state.carrito.filter(c => c.id !== id);
+      renderPOS();
+    }
+
+    function vaciarCarrito() {
+      state.carrito = [];
+      state.cadiSeleccionado = '';
+      state.sociosManuales = [];
+      renderPOS();
+    }
+
+    function seleccionarCadi(id) {
+      state.cadiSeleccionado = id;
+      state.sociosManuales = [];
+      renderPOS();
+    }
+
+    function toggleBuscadorSocio() {
+      state.mostrarBuscador = !state.mostrarBuscador;
+      const el = document.getElementById('buscador-socio-container');
+      const btn = document.getElementById('btn-buscador-manual');
+      if (state.mostrarBuscador) {
+        el.classList.remove('hidden');
+        btn.innerText = 'Cerrar Buscador';
+        document.getElementById('input-buscar-socio').value = '';
+        document.getElementById('input-buscar-socio').focus();
+      } else {
+        el.classList.add('hidden');
+        btn.innerText = '+ Asociar Socio';
+        document.getElementById('buscador-sugerencias').classList.add('hidden');
+      }
+    }
+
+    function filtrarSocioBuscador(query) {
+      const suggestions = document.getElementById('buscador-sugerencias');
+      suggestions.innerHTML = '';
+
+      if (query.trim().length < 2) {
+        suggestions.classList.add('hidden');
+        return;
+      }
+
+      const filtrados = state.socios.filter(s => s.nombre.toLowerCase().includes(query.toLowerCase()) && s.activo);
+      
+      if (filtrados.length === 0) {
+        suggestions.innerHTML = '<div class="px-3 py-2 text-slate-500 text-[10px]">No se encontraron socios</div>';
+        suggestions.classList.remove('hidden');
+        return;
+      }
+
+      filtrados.forEach(socio => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => {
+          asociarSocioManual(socio.id);
+          toggleBuscadorSocio();
+        };
+        btn.className = "w-full text-left px-3 py-1.5 hover:bg-slate-800 text-white text-xs flex justify-between";
+        btn.innerHTML = `<span>${socio.nombre}</span><span class="text-[10px] text-slate-450">${socio.codigo_socio}</span>`;
+        suggestions.appendChild(btn);
+      });
+
+      suggestions.classList.remove('hidden');
+    }
+
+    function asociarSocioManual(id) {
+      const socio = state.socios.find(s => s.id === id);
+      if (socio && !state.sociosManuales.some(s => s.id === id)) {
+        state.sociosManuales.push(socio);
+        renderPOS();
+      }
+    }
+
+    function removerSocioManual(id) {
+      state.sociosManuales = state.sociosManuales.filter(s => s.id !== id);
+      renderPOS();
+    }
+
+    // --- COBRO / SPLIT MESA ---
+    function abrirModalCobro() {
+      if (state.carrito.length === 0) return;
+
+      const totalCarrito = state.carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+      const totalConIVA = totalCarrito;
+
+      const cadiActual = state.cadis.find(c => c.id == state.cadiSeleccionado);
+      const sociosActivos = cadiActual ? cadiActual.clientes : state.sociosManuales;
+
+      document.getElementById('modal-cadi-nombre').innerText = cadiActual ? cadiActual.numero_cadi : 'Sin Cadi';
+      document.getElementById('modal-total-cuenta').innerText = formatMonto(totalConIVA);
+
+      const desgloseContainer = document.getElementById('modal-split-desglose');
+      desgloseContainer.innerHTML = '';
+
+      state.metodosPago = {};
+
+      if (sociosActivos.length === 0) {
+        state.splitCalculado = {
+          split: false,
+          total: totalConIVA,
+          divisiones: [{ cliente_id: 999, nombre: 'Cliente General', codigo_socio: 'GENERICO', porcentaje: 100, monto: totalConIVA }]
+        };
+        state.metodosPago[999] = 'EFECTIVO';
+
+        desgloseContainer.innerHTML = `
+          <div class="flex justify-between items-center p-3 bg-slate-850 border border-slate-800 rounded-xl text-xs">
+            <div>
+              <span class="text-white font-bold block">Cliente General</span>
+              <span class="text-[9px] text-slate-450 block">Cuenta única • 100%</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm font-extrabold text-white">${formatMonto(totalConIVA)}</span>
+              <select onchange="cambiarMetodoPago(999, this.value)" class="bg-slate-800 border border-slate-700 text-[10px] text-white rounded px-1.5 py-1">
+                <option value="EFECTIVO">Efectivo 💵</option>
+                <option value="TARJETA">Tarjeta 💳</option>
+              </select>
+            </div>
+          </div>
+        `;
+      } else {
+        const N = sociosActivos.length;
+        const porcentaje = 100 / N;
+        const baseMonto = Math.floor((totalConIVA / N) * 100) / 100;
+        const totalDividido = baseMonto * N;
+        const residuo = parseFloat((totalConIVA - totalDividido).toFixed(2));
+
+        const divisiones = sociosActivos.map((socio, idx) => {
+          let miMonto = baseMonto;
+          if (idx === N - 1) {
+            miMonto = parseFloat((miMonto + residuo).toFixed(2));
+          }
+          state.metodosPago[socio.id] = 'EFECTIVO';
+
+          return {
+            cliente_id: socio.id,
+            nombre: socio.nombre,
+            codigo_socio: socio.codigo_socio,
+            porcentaje: porcentaje,
+            monto: miMonto
+          };
+        });
+
+        state.splitCalculado = {
+          split: true,
+          total: totalConIVA,
+          divisiones: divisiones
+        };
+
+        divisiones.forEach(d => {
+          const divRow = document.createElement('div');
+          divRow.className = "flex justify-between items-center p-3 bg-slate-850 border border-slate-800 rounded-xl text-xs";
+          divRow.innerHTML = `
+            <div>
+              <span class="text-white font-bold block">${d.nombre}</span>
+              <span class="text-[9px] text-slate-450 block">${d.codigo_socio} • ${d.porcentaje.toFixed(0)}%</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm font-extrabold text-white">${formatMonto(d.monto)}</span>
+              <select onchange="cambiarMetodoPago(${d.cliente_id}, this.value)" class="bg-slate-800 border border-slate-700 text-[10px] text-white rounded px-1.5 py-1">
+                <option value="EFECTIVO">Efectivo 💵</option>
+                <option value="TARJETA">Tarjeta 💳</option>
+                <option value="CARGO_SOCIO">Cargo Socio ⛳</option>
+              </select>
+            </div>
+          `;
+          desgloseContainer.appendChild(divRow);
+        });
+      }
+
+      document.getElementById('cobro-exito-container').classList.add('hidden');
+      document.getElementById('cobro-detalle-container').classList.remove('hidden');
+      document.getElementById('btn-cerrar-cobro').classList.remove('hidden');
+      document.getElementById('modal-cobro').classList.remove('hidden');
+    }
+
+    function cambiarMetodoPago(socioId, metodo) {
+      state.metodosPago[socioId] = metodo;
+    }
+
+    function cerrarModalCobro() {
+      document.getElementById('modal-cobro').classList.add('hidden');
+    }
+
+    function confirmarPago() {
+      // 1. Descontar Stock
+      state.productos = state.productos.map(p => {
+        const itemCar = state.carrito.find(c => c.id === p.id);
+        if (itemCar) {
+          const nuevosStocks = { ...p.stocks };
+          nuevosStocks[state.areaSeleccionada] = Math.max(0, nuevosStocks[state.areaSeleccionada] - itemCar.cantidad);
+          return { ...p, stocks: nuevosStocks };
+        }
+        return p;
+      });
+
+      // 3. Registrar venta en el Turno Activo
+      const pagosRegistro = state.splitCalculado.divisiones.map(d => ({
+        cliente_id: d.cliente_id,
+        nombre: d.nombre,
+        monto: d.monto,
+        metodo: state.metodosPago[d.cliente_id]
+      }));
+
+      const registroVenta = {
+        id: Date.now() + Math.random(),
+        fecha: new Date().toISOString(),
+        area: state.areaSeleccionada,
+        items: state.carrito.map(c => `${c.cantidad}x ${c.nombre}`),
+        pagos: pagosRegistro,
+        total: state.splitCalculado.total
+      };
+
+      state.turnoVentas.push(registroVenta);
+
+      // Registrar historial de consumo individual del socio (si no es genérico)
+      state.splitCalculado.divisiones.forEach(div => {
+        if (div.cliente_id !== 999) {
+          state.historialConsumos.unshift({
+            id: Date.now() + Math.random(),
+            cliente_id: div.cliente_id,
+            nombre_socio: div.nombre,
+            area: state.areaSeleccionada,
+            fecha: new Date().toISOString(),
+            metodo_pago: state.metodosPago[div.cliente_id],
+            cadi: state.cadis.find(c => c.id == state.cadiSeleccionado)?.nombre || null,
+            total_grupo: state.splitCalculado.total,
+            mi_porcentaje: div.porcentaje,
+            mi_pago: div.monto,
+            items: state.carrito.map(c => `${c.cantidad}x ${c.nombre} (${formatMonto(c.precio)})`)
+          });
+        }
+      });
+
+      // Registrar adeudos para pagos tipo CARGO_SOCIO
+      state.splitCalculado.divisiones.forEach((div, idx) => {
+        if (div.cliente_id !== 999 && state.metodosPago[div.cliente_id] === 'CARGO_SOCIO') {
+          const socio = state.socios.find(s => s.id === div.cliente_id);
+          state.adeudos.push({
+            id: Date.now() + idx,
+            socio_id: div.cliente_id,
+            nombre_socio: div.nombre,
+            codigo_socio: socio ? socio.codigo_socio : 'N/A',
+            monto: div.monto,
+            fecha: new Date().toISOString(),
+            concepto: state.carrito.map(c => `${c.cantidad}x ${c.nombre}`).join(', '),
+            estado: 'PENDIENTE',
+            fecha_cobro: null,
+            metodo_cobro: null
+          });
+        }
+      });
+
+      guardarEnStorage();
+
+      document.getElementById('cobro-detalle-container').classList.add('hidden');
+      document.getElementById('btn-cerrar-cobro').classList.add('hidden');
+      document.getElementById('cobro-exito-container').classList.remove('hidden');
+
+      setTimeout(() => {
+        cerrarModalCobro();
+        vaciarCarrito();
+        aplicarAccesoRuta();
+      }, 1500);
+    }
+
+    // --- ESCÁNER QR SIMULADO ---
+    function abrirSimuladorQR() {
+      document.getElementById('modal-qr').classList.remove('hidden');
+      document.getElementById('input-qr-token').value = '';
+      document.getElementById('input-qr-token').focus();
+      document.getElementById('qr-error-msg').classList.add('hidden');
+    }
+    function cerrarSimuladorQR() {
+      document.getElementById('modal-qr').classList.add('hidden');
+    }
+    function procesarEscaneoQR() {
+      const token = document.getElementById('input-qr-token').value.trim();
+      const err = document.getElementById('qr-error-msg');
+      err.classList.add('hidden');
+
+      const socio = state.socios.find(s => s.qr_token === token && s.activo);
+      if (socio) {
+        if (!state.sociosManuales.some(s => s.id === socio.id)) {
+          state.sociosManuales.push(socio);
+        }
+        cerrarSimuladorQR();
+        toggleBuscadorSocio();
+        renderPOS();
+      } else {
+        err.innerText = "QR no reconocido.";
+        err.classList.remove('hidden');
+      }
+    }
+
+    // --- PORTAL SOCIO ---
+    function renderSocioPortal() {
+      document.getElementById('socio-sesion-nombre').innerText = state.socioSesion.nombre;
+      document.getElementById('socio-sesion-codigo').innerText = state.socioSesion.codigo_socio;
+      document.getElementById('socio-sesion-qr-text').innerText = state.socioSesion.qr_token;
+
+      const misGastos = state.historialConsumos.filter(h => h.cliente_id == state.socioSesion.id);
+      const container = document.getElementById('contenedor-mis-gastos');
+      container.innerHTML = '';
+
+      if (misGastos.length === 0) {
+        container.innerHTML = `
+          <div class="glass-card rounded-3xl p-12 text-center border border-slate-800 text-slate-500 text-xs">
+            <p class="font-bold">No hay consumos registrados</p>
+            <p class="mt-1">Tus consumos aparecerán aquí una vez liquidada la cuenta en el POS.</p>
+          </div>
+        `;
+        return;
+      }
+
+      misGastos.forEach(g => {
+        const card = document.createElement('div');
+        card.className = "glass-card rounded-2xl border border-slate-800 p-5 space-y-4";
+        
+        let itemsList = '';
+        g.items.forEach(it => {
+          itemsList += `<li>• ${it}</li>`;
+        });
+
+        card.innerHTML = `
+          <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+            <div>
+              <span class="text-xs font-bold text-white block">📍 Consumo en ${g.area}</span>
+              <span class="text-[10px] text-slate-400 block mt-0.5">📅 ${new Date(g.fecha).toLocaleString()}</span>
+            </div>
+            <div class="text-right text-xs">
+              <span class="text-[10px] text-slate-400 block">Cadi:</span>
+              <span class="font-bold text-white">${g.cadi || 'Sin Cadi'}</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 block mb-1">Detalle del ticket:</span>
+              <ul class="space-y-1 text-slate-350">${itemsList}</ul>
+            </div>
+            <div class="space-y-2 md:border-l md:border-slate-800 pl-0 md:pl-4 flex flex-col justify-between">
+              <div class="space-y-1">
+                <div class="flex justify-between text-slate-400">
+                  <span>Total Grupo:</span>
+                  <span class="text-white">${formatMonto(g.total_grupo)}</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                  <span>Mi Split (${g.mi_porcentaje.toFixed(0)}%):</span>
+                  <span class="text-white">${formatMonto(g.mi_pago)}</span>
+                </div>
+              </div>
+              <div class="flex justify-between items-center border-t border-slate-800 pt-2">
+                <span class="bg-emerald-500/10 text-emerald-400 text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-500/25">${g.metodo_pago}</span>
+                <div>
+                  <span class="text-[9px] text-slate-400 block text-right">Mi Pago:</span>
+                  <span class="text-base font-extrabold text-white font-sans">${formatMonto(g.mi_pago)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function regenerarSocioQR() {
+      const nuevoToken = 'token-' + Math.random().toString(36).substr(2, 9);
+      state.socios = state.socios.map(s => s.id === state.socioSesion.id ? { ...s, qr_token: nuevoToken } : s);
+      state.socioSesion.qr_token = nuevoToken;
+      guardarEnStorage();
+      renderSocioPortal();
+    }
+
+    function copiarQRToken() {
+      navigator.clipboard.writeText(state.socioSesion.qr_token);
+      alert('Token QR copiado.');
+    }
+
+    // --- PANEL ADMINISTRATIVO ---
+    function renderAdminPanel() {
+      document.getElementById('balance-caja-efectivo').innerText = formatMonto(state.caja_efectivo);
+      document.getElementById('balance-caja-tarjetas').innerText = formatMonto(state.caja_tarjetas);
+      document.getElementById('balance-caja-cargos').innerText = formatMonto(state.caja_cargos);
+
+      const tbody = document.getElementById('tabla-admin-inventario');
+      tbody.innerHTML = '';
+      state.productos.forEach(p => {
+        const row = document.createElement('tr');
+        row.className = "hover:bg-slate-800/20 transition-colors";
+        row.innerHTML = `
+          <td class="px-5 py-4">
+            <span class="text-white font-bold block">${p.nombre}</span>
+            <span class="text-[10px] text-slate-400 block mt-0.5">${p.categoria} • Mínimo: ${p.min} pz</span>
+          </td>
+          <td class="px-5 py-4 text-center font-bold ${p.stocks.Bar < p.min ? 'text-red-400' : 'text-slate-100'}">${p.stocks.Bar} pz</td>
+          <td class="px-5 py-4 text-center font-bold ${p.stocks.Snack < p.min ? 'text-red-400' : 'text-slate-100'}">${p.stocks.Snack} pz</td>
+          <td class="px-5 py-4 text-center font-bold ${p.stocks.Palapa < p.min ? 'text-red-400' : 'text-slate-100'}">${p.stocks.Palapa} pz</td>
+          <td class="px-5 py-4 text-center">
+            <button onclick="abrirAjusteStock(${p.id})" class="bg-campestre-gold/10 hover:bg-campestre-gold/20 text-campestre-gold border border-campestre-gold/20 text-[10px] font-bold px-2.5 py-1 rounded">✏️ Modificar</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      const selectCadiRonda = document.getElementById('admin-select-cadi-ronda');
+      selectCadiRonda.innerHTML = '<option value="">-- Selecciona --</option>';
+      state.cadis.filter(c => c.estado === 'DISPONIBLE').forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.id;
+        option.innerText = `${c.numero_cadi} - ${c.nombre}`;
+        selectCadiRonda.appendChild(option);
+      });
+
+      const checkSociosContainer = document.getElementById('admin-checkboxes-socios');
+      checkSociosContainer.innerHTML = '';
+      state.socios.forEach(s => {
+        const label = document.createElement('label');
+        label.className = "flex items-center space-x-2 text-[10px] cursor-pointer hover:text-white text-slate-400";
+        label.innerHTML = `
+          <input type="checkbox" value="${s.id}" name="socios_ronda_check" class="rounded bg-slate-800 text-campestre-gold border-slate-700 focus:ring-0" />
+          <span>${s.nombre} (${s.codigo_socio})</span>
+        `;
+        checkSociosContainer.appendChild(label);
+      });
+
+      const cadisEnRonda = document.getElementById('admin-cadis-en-ronda');
+      cadisEnRonda.innerHTML = '';
+      const activos = state.cadis.filter(c => c.estado === 'EN_RONDA');
+      
+      if (activos.length === 0) {
+        cadisEnRonda.innerHTML = `<p class="text-[10px] text-slate-500 italic">No hay rondas activas actualmente.</p>`;
+      } else {
+        activos.forEach(c => {
+          const div = document.createElement('div');
+          div.className = "bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 flex justify-between items-center";
+          div.innerHTML = `
+            <div>
+              <span class="font-bold text-white block">${c.numero_cadi} - ${c.nombre}</span>
+              <span class="text-[9px] text-emerald-400 block mt-0.5">Atendiendo a ${c.clientes.length} socios</span>
+            </div>
+            <button onclick="liberarCadiAdmin(${c.id})" class="text-[9px] bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/25 px-2 py-1 rounded font-bold">Liberar</button>
+          `;
+          cadisEnRonda.appendChild(div);
+        });
+      }
+
+      renderAdeudosAdmin();
+    }
+
+    function crearSocioAdmin() {
+      const codigo = document.getElementById('admin-socio-codigo').value.trim();
+      const nombre = document.getElementById('admin-socio-nombre').value.trim();
+
+      if (!codigo || !nombre) {
+        alert('Completa todos los campos del socio.');
+        return;
+      }
+
+      if (state.socios.some(s => s.codigo_socio.toUpperCase() === codigo.toUpperCase())) {
+        alert('El código de socio ya existe.');
+        return;
+      }
+
+      state.socios.push({
+        id: state.socios.length + 1,
+        codigo_socio: codigo.toUpperCase(),
+        nombre: nombre,
+        qr_token: 'token-' + Math.random().toString(36).substr(2, 9),
+        activo: true
+      });
+
+      guardarEnStorage();
+      renderAdminPanel();
+
+      document.getElementById('admin-socio-codigo').value = '';
+      document.getElementById('admin-socio-nombre').value = '';
+      alert('Socio registrado con éxito.');
+    }
+
+    function crearCadiAdmin() {
+      const numero = document.getElementById('admin-cadi-numero').value.trim();
+      const nombre = document.getElementById('admin-cadi-nombre').value.trim();
+
+      if (!numero || !nombre) {
+        alert('Completa todos los campos del Cadi.');
+        return;
+      }
+
+      if (state.cadis.some(c => c.numero_cadi.toUpperCase() === numero.toUpperCase())) {
+        alert('El número de Cadi ya existe.');
+        return;
+      }
+
+      state.cadis.push({
+        id: state.cadis.length + 1,
+        numero_cadi: numero.toUpperCase(),
+        nombre: nombre,
+        estado: 'DISPONIBLE',
+        clientes: []
+      });
+
+      guardarEnStorage();
+      renderAdminPanel();
+
+      document.getElementById('admin-cadi-numero').value = '';
+      document.getElementById('admin-cadi-nombre').value = '';
+      alert('Cadi registrado con éxito.');
+    }
+
+    function iniciarRondaAdmin() {
+      const cadiId = document.getElementById('admin-select-cadi-ronda').value;
+      if (!cadiId) {
+        alert('Selecciona un Cadi disponible.');
+        return;
+      }
+
+      const checkboxes = document.getElementsByName('socios_ronda_check');
+      const sociosSeleccionadosIds = [];
+      checkboxes.forEach(chk => {
+        if (chk.checked) {
+          sociosSeleccionadosIds.push(parseInt(chk.value));
+        }
+      });
+
+      if (sociosSeleccionadosIds.length === 0) {
+        alert('Selecciona al menos un socio.');
+        return;
+      }
+
+      const cadi = state.cadis.find(c => c.id == cadiId);
+      const sociosRonda = state.socios.filter(s => sociosSeleccionadosIds.includes(s.id));
+
+      if (cadi) {
+        cadi.estado = 'EN_RONDA';
+        cadi.clientes = sociosRonda;
+        guardarEnStorage();
+        renderAdminPanel();
+        alert('Ronda iniciada.');
+      }
+    }
+
+    function liberarCadiAdmin(id) {
+      const cadi = state.cadis.find(c => c.id === id);
+      if (cadi) {
+        cadi.estado = 'DISPONIBLE';
+        cadi.clientes = [];
+        guardarEnStorage();
+        renderAdminPanel();
+        alert('Cadi liberado.');
+      }
+    }
+
+    // --- AJUSTE STOCK ADMIN ---
+    function abrirAjusteStock(prodId) {
+      const prod = state.productos.find(p => p.id === prodId);
+      if (!prod) return;
+
+      state.prodAjuste = prod;
+      state.areaAjuste = 'Palapa';
+      
+      document.getElementById('ajuste-producto-nombre').innerText = prod.nombre;
+      document.getElementById('ajuste-select-area').value = 'Palapa';
+      document.getElementById('ajuste-stock-input').value = prod.stocks.Palapa;
+
+      document.getElementById('modal-ajuste').classList.remove('hidden');
+    }
+
+    function cambiarAreaAjuste(area) {
+      state.areaAjuste = area;
+      if (state.prodAjuste) {
+        document.getElementById('ajuste-stock-input').value = state.prodAjuste.stocks[area];
+      }
+    }
+
+    function cerrarAjusteStock() {
+      document.getElementById('modal-ajuste').classList.add('hidden');
+      state.prodAjuste = null;
+    }
+
+    function confirmarAjusteStock() {
+      const nuevoStock = parseInt(document.getElementById('ajuste-stock-input').value);
+      if (isNaN(nuevoStock) || nuevoStock < 0) {
+        alert('Stock no válido.');
+        return;
+      }
+
+      if (state.prodAjuste) {
+        state.productos = state.productos.map(p => {
+          if (p.id === state.prodAjuste.id) {
+            const nuevosStocks = { ...p.stocks };
+            nuevosStocks[state.areaAjuste] = nuevoStock;
+            return { ...p, stocks: nuevosStocks };
+          }
+          return p;
+        });
+
+        guardarEnStorage();
+        cerrarAjusteStock();
+        renderAdminPanel();
+        alert('Stock ajustado con éxito.');
+      }
+    }
+
+    // --- GESTIÓN DE ADEUDOS ---
+    function renderAdeudosAdmin() {
+      const container = document.getElementById('admin-lista-adeudos');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const porSocio = {};
+      state.adeudos.forEach(a => {
+        if (!porSocio[a.socio_id]) {
+          porSocio[a.socio_id] = { nombre: a.nombre_socio, codigo: a.codigo_socio, items: [] };
+        }
+        porSocio[a.socio_id].items.push(a);
+      });
+
+      const socioIds = Object.keys(porSocio);
+      if (socioIds.length === 0) {
+        container.innerHTML = '<p class="text-[10px] text-slate-500 italic text-center py-4">No hay adeudos registrados.</p>';
+      } else {
+        socioIds.forEach(sid => {
+          const grupo = porSocio[sid];
+          const pendientes = grupo.items.filter(a => a.estado === 'PENDIENTE');
+          const totalPendiente = pendientes.reduce((s, a) => s + a.monto, 0);
+
+          const card = document.createElement('div');
+          card.className = 'bg-slate-950 rounded-2xl border border-slate-800 p-4 space-y-3';
+
+          let itemsHtml = '';
+          grupo.items.forEach(a => {
+            const isPendiente = a.estado === 'PENDIENTE';
+            const badge = isPendiente
+              ? '<span class="bg-amber-500/10 text-amber-400 text-[9px] font-bold px-2 py-0.5 rounded border border-amber-500/25">PENDIENTE</span>'
+              : '<span class="bg-emerald-500/10 text-emerald-400 text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-500/25">COBRADO</span>';
+
+            const acciones = isPendiente ? `
+              <div class="flex items-center space-x-1.5 mt-1 sm:mt-0">
+                <select id="metodo-cobro-${a.id}" class="bg-slate-800 border border-slate-700 text-[9px] text-white rounded px-1 py-0.5">
+                  <option value="EFECTIVO">Efectivo 💵</option>
+                  <option value="TARJETA">Tarjeta 💳</option>
+                </select>
+                <button onclick="cobrarAdeudo(${a.id})" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/25 text-[9px] font-bold px-2 py-1 rounded whitespace-nowrap">Cobrar ✓</button>
+              </div>
+            ` : '<span class="text-[9px] text-slate-500 mt-1 sm:mt-0">' + a.metodo_cobro + '</span>';
+
+            itemsHtml += `
+              <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2.5 border-b border-slate-900 last:border-0 gap-1">
+                <div class="flex-1 min-w-0">
+                  <span class="text-white font-medium block text-xs truncate">${a.concepto}</span>
+                  <span class="text-[9px] text-slate-500">${new Date(a.fecha).toLocaleString()}</span>
+                </div>
+                <div class="flex items-center space-x-2 flex-wrap gap-1">
+                  <span class="font-bold text-white font-sans text-xs">${formatMonto(a.monto)}</span>
+                  ${badge}
+                  ${acciones}
+                </div>
+              </div>
+            `;
+          });
+
+          card.innerHTML = `
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-white font-bold block text-xs">👤 ${grupo.nombre}</span>
+                <span class="text-[9px] text-slate-400">${grupo.codigo}</span>
+              </div>
+              <div class="text-right">
+                <span class="text-[9px] text-slate-400 block">Pendiente:</span>
+                <span class="font-extrabold text-sm ${totalPendiente > 0 ? 'text-amber-400' : 'text-emerald-400'} font-sans">${formatMonto(totalPendiente)}</span>
+              </div>
+            </div>
+            <div class="space-y-0">${itemsHtml}</div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      const selectSocio = document.getElementById('admin-adeudo-socio');
+      if (selectSocio) {
+        selectSocio.innerHTML = '<option value="">-- Selecciona Socio --</option>';
+        state.socios.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.innerText = s.nombre + ' (' + s.codigo_socio + ')';
+          selectSocio.appendChild(opt);
+        });
+      }
+    }
+
+    function cobrarAdeudo(adeudoId) {
+      const adeudo = state.adeudos.find(a => a.id === adeudoId);
+      if (!adeudo || adeudo.estado !== 'PENDIENTE') return;
+
+      const selectEl = document.getElementById('metodo-cobro-' + adeudoId);
+      const metodo = selectEl ? selectEl.value : 'EFECTIVO';
+
+      adeudo.estado = 'COBRADO';
+      adeudo.metodo_cobro = metodo;
+      adeudo.fecha_cobro = new Date().toISOString();
+
+      if (metodo === 'EFECTIVO') {
+        state.caja_efectivo += adeudo.monto;
+      } else if (metodo === 'TARJETA') {
+        state.caja_tarjetas += adeudo.monto;
+      }
+
+      state.caja_cargos = Math.max(0, state.caja_cargos - adeudo.monto);
+
+      guardarEnStorage();
+      renderAdminPanel();
+      alert('Adeudo de ' + formatMonto(adeudo.monto) + ' cobrado en ' + metodo + '.');
+    }
+
+    function agregarCargoManual() {
+      const socioId = parseInt(document.getElementById('admin-adeudo-socio').value);
+      const monto = parseFloat(document.getElementById('admin-adeudo-monto').value);
+      const concepto = document.getElementById('admin-adeudo-concepto').value.trim();
+
+      if (!socioId || isNaN(monto) || monto <= 0) {
+        alert('Selecciona un socio y un monto válido.');
+        return;
+      }
+
+      const socio = state.socios.find(s => s.id === socioId);
+      if (!socio) return;
+
+      state.adeudos.push({
+        id: Date.now(),
+        socio_id: socio.id,
+        nombre_socio: socio.nombre,
+        codigo_socio: socio.codigo_socio,
+        monto: monto,
+        fecha: new Date().toISOString(),
+        concepto: concepto || 'Cargo manual',
+        estado: 'PENDIENTE',
+        fecha_cobro: null,
+        metodo_cobro: null
+      });
+
+      state.caja_cargos += monto;
+
+      guardarEnStorage();
+      renderAdminPanel();
+
+      document.getElementById('admin-adeudo-monto').value = '';
+      document.getElementById('admin-adeudo-concepto').value = '';
+      alert('Cargo agregado al socio ' + socio.nombre);
+    }
+
+    // --- FORMATO ---
+    function formatMonto(monto) {
+      return '$' + monto.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+    }
+
+    // --- INICIALIZAR APP ---
+    window.onload = function() {
+      aplicarAccesoRuta();
+    };
+  </script>
+</body>
+</html>
