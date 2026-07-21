@@ -10,6 +10,9 @@ const InsumosView = lazy(() => import('./views/InsumosView'));
 const DividirCadiView = lazy(() => import('./views/DividirCadiView'));
 const VentasTurnoView = lazy(() => import('./views/VentasTurnoView'));
 const TemplateGeneratorView = lazy(() => import('./views/TemplateGeneratorView'));
+const FacturacionView = lazy(() => import('./views/FacturacionView'));
+const QrMenuView = lazy(() => import('./views/QrMenuView'));
+const DeliveryView = lazy(() => import('./views/DeliveryView'));
 import { Shield, Users, LogOut, Menu, UserCheck, Lock, Fingerprint, CheckCircle2, RefreshCw, Sun, Moon, Sparkles } from 'lucide-react';
 import Logo from './components/Logo';
 import featuresConfig from './config/features.json';
@@ -553,24 +556,30 @@ function App() {
                   )}
                   {(featuresConfig as any).facturacion?.enabled && (
                     <button
-                      onClick={() => alert('Módulo de Facturación CFDI preparado para el cliente')}
-                      className="px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all bg-blue-600/80 text-white hover:bg-blue-600"
+                      onClick={() => setCurrentView('facturacion')}
+                      className={`px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all ${
+                        currentView === 'facturacion' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-450 hover:text-slate-200'
+                      }`}
                     >
                       {(featuresConfig as any).facturacion.label}
                     </button>
                   )}
                   {(featuresConfig as any).qrMenu?.enabled && (
                     <button
-                      onClick={() => alert('Módulo de Menú Digital QR activo para el cliente')}
-                      className="px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all bg-teal-600/80 text-white hover:bg-teal-600"
+                      onClick={() => setCurrentView('qrMenu')}
+                      className={`px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all ${
+                        currentView === 'qrMenu' ? 'bg-teal-600 text-white shadow-sm' : 'text-slate-450 hover:text-slate-200'
+                      }`}
                     >
                       {(featuresConfig as any).qrMenu.label}
                     </button>
                   )}
                   {(featuresConfig as any).delivery?.enabled && (
                     <button
-                      onClick={() => alert('Módulo de Pedidos a Domicilio activo para el cliente')}
-                      className="px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all bg-rose-600/80 text-white hover:bg-rose-600"
+                      onClick={() => setCurrentView('delivery')}
+                      className={`px-4 py-2 text-xs font-semibold rounded-lg btn-premium transition-all ${
+                        currentView === 'delivery' ? 'bg-rose-600 text-white shadow-sm' : 'text-slate-450 hover:text-slate-200'
+                      }`}
                     >
                       {(featuresConfig as any).delivery.label}
                     </button>
@@ -613,6 +622,9 @@ function App() {
               {isAdmin && featuresConfig.stock.enabled && currentView === 'stock' && <StockView />}
               {isAdmin && featuresConfig.insumos.enabled && currentView === 'insumos' && <InsumosView />}
               {currentView === 'plantillas' && <TemplateGeneratorView />}
+              {currentView === 'facturacion' && <FacturacionView />}
+              {currentView === 'qrMenu' && <QrMenuView />}
+              {currentView === 'delivery' && <DeliveryView />}
             </Suspense>
           </div>
         ) : (
