@@ -13,6 +13,7 @@ import { Shield, Users, LogOut, Menu, UserCheck, Lock, Fingerprint, CheckCircle2
 import Logo from './components/Logo';
 import featuresConfig from './config/features.json';
 import brandingConfig from './config/branding.json';
+import apiClient from './api/apiClient';
 
 function App() {
   const { token, userType, user, socio, logout, setSession, tema, toggleTema, currentView, setCurrentView } = useStore();
@@ -86,12 +87,9 @@ function App() {
     setNombre(val);
     if (val.length >= 2) {
       try {
-        const response = await fetch(`/api/auth/socios/buscar?q=${encodeURIComponent(val)}`);
-        if (response.ok) {
-          const data = await response.json();
-          setSugerencias(data);
-          setMostrarSugerencias(true);
-        }
+        const response = await apiClient.get(`/api/auth/socios/buscar?q=${encodeURIComponent(val)}`);
+        setSugerencias(response.data);
+        setMostrarSugerencias(true);
       } catch (err) {
         console.error('Error fetching socio suggestions:', err);
       }
@@ -107,50 +105,32 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login-interno', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Fallo de autenticación');
-      }
-
+      const response = await apiClient.post('/api/auth/login-interno', { username, password });
+      const data = response.data;
       setSession(data.token, data.usuario, 'INTERNAL');
       setSuccess('Sesión iniciada correctamente');
       setUsername('');
       setPassword('');
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'Error de inicio de sesión');
     } finally {
       setLoading(false);
     }
-  };  const handleLoginSocio = async (e: React.FormEvent) => {
+  };
+
+  const handleLoginSocio = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login-cliente', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Fallo de autenticación');
-      }
-
+      const response = await apiClient.post('/api/auth/login-cliente', { nombre });
+      const data = response.data;
       setSession(data.token, data.cliente, 'CLIENT');
       setSuccess('Sesión iniciada correctamente');
       setNombre('');
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'Error de inicio de sesión');
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { handleMockRequest } from './mockBackend';
 
 const apiClient = axios.create({
   baseURL: '',
@@ -15,9 +16,7 @@ apiClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // Agregar Idempotency-Key para métodos de modificación (POST, PUT, DELETE) si no se especifica una
     if (['post', 'put', 'delete'].includes(config.method || '') && !config.headers['Idempotency-Key']) {
-      // Generar una llave idempotente única basada en timestamp o UUID
       const randHex = Math.random().toString(16).substring(2, 10);
       config.headers['Idempotency-Key'] = `idem-${Date.now()}-${randHex}`;
     }
@@ -29,18 +28,28 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Interceptor para manejar errores comunes (ej: desloguear si el token expira)
+// Interceptor de respuesta: Si falla la conexión con el servidor (ej: en GitHub Pages sin backend local), usamos el Mock Backend Client-Side
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const isGitHubPages = typeof window !== 'undefined' && window.location.hostname.includes('github.io');
+    const isNetworkError = !error.response || error.response.status === 404 || error.code === 'ERR_NETWORK';
+
+    if (isGitHubPages || isNetworkError) {
+      try {
+        const mockRes = await handleMockRequest(error.config);
+        return mockRes;
+      } catch (mockErr) {
+        return Promise.reject(mockErr);
+      }
+    }
+
     if (error.response && error.response.status === 401) {
       console.warn('Sesión expirada o no autorizada. Redirigiendo a Login...');
-      // Limpiar sesión local del store de manera simple
       localStorage.removeItem('campestre_token');
       localStorage.removeItem('campestre_user_type');
       localStorage.removeItem('campestre_user');
       localStorage.removeItem('campestre_socio');
-      // Recargar la página limpia el estado de Zustand
       if (typeof window !== 'undefined') {
         window.location.reload();
       }
